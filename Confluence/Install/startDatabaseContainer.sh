@@ -2,8 +2,9 @@
 sudo docker network create --driver=bridge --subnet=172.19.0.0/16 db-network
 read -r -p "Database Password: " password
 sudo docker run \
-  -d -p 5433:5432 \
+  -d -p 5824:5432 \
   --name postgres  \
+  --shm-size=16g \
   --env POSTGRES_PASSWORD="$password" \
   --restart always \
   --env PGDATA=/var/lib/postgresql/data/pgdata \

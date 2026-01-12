@@ -27,7 +27,7 @@ CREATE TYPE typeofdata AS ENUM (
     'geo_poten_40m_with_1800ha','thermal_con_40','thermal_con_60','thermal_con_80',
     'thermal_con_100','groundwater_measuring_points','building_surfaces',
     'mean_water_temp_80','tree_vector','holstein_restrictions',
-    'geologic_sections_berlin','protection_area'
+    'geologic_sections_berlin','protection_area','area_usage'
 );
 
 CREATE TYPE area AS ENUM ('berlin');
@@ -220,3 +220,8 @@ VALUES ('geodrilling_data','berlin','near_range','drilling_points.geojson','rest
 -- Protection Areas
 INSERT INTO geothermal_parameter (typeofdata, area, range, getrequest, service, geometry_type)
 VALUES ('protection_area','berlin','near_range','schutzgebiete.geojson','restrictive','multipolygon');
+
+--depth restrictions Berlin (Holstien)
+INSERT INTO geothermal_parameter (geometry_type,typeofdata, area, range, getrequest, service)
+    VALUES ('polygon','area_usage','berlin','near_range','https://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s_wfs_alkis_tatsaechlichenutzungflaechen?REQUEST=GetCapabilities&SERVICE=wfs&version=2.0.0&request=GetFeature&typeNames=fis:s_wfs_alkis_tatsaechlichenutzungflaechen&outputFormat=application/json','restrictive');
+    
