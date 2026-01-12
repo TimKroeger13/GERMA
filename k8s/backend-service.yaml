@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: germag-backend-stage
+  namespace: germa
+spec:
+  selector:
+    app: germag-backend-stage
+  ports:
+  - protocol: TCP
+    port: 80   # 443 -> curl -k https://germag-backend.germa.svc.cluster.local/api/test/test geht aus cluster, 80 -> https://germa.gs-local.germa.de/api/test/test
+    targetPort: 443
+    name: external
+  - protocol: TCP
+    port: 443   # 443 -> curl -k https://germag-backend.germa.svc.cluster.local/api/test/test geht aus cluster, 80 -> https://germa.gs-local.germa.de/api/test/test
+    targetPort: 443
+    name: internal
+  type: ClusterIP

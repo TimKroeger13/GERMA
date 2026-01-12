@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GERMA Tutorial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(180deg, #1e1e1e, #121212);
+            color: #f0f0f0;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 4rem;
+            margin: 50px 0;
+        }
+
+        section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            gap: 20px;
+            opacity: 0;
+            transform: translateY(100px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        section:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        section:nth-child(even) {
+            flex-direction: row;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+            background: rgba(30, 30, 30, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        .content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .content p {
+            font-size: 1.5rem;
+            line-height: 1.6;
+            color: #d0d0d0;
+        }
+
+        .gif {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            max-width: 1200px
+        }
+
+        .gif video {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        .divider {
+            position: absolute;
+            bottom: 0px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 3px;
+            background: linear-gradient(90deg, #ff6f61, #f0f0f0);
+            border-radius: 1.5px;
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(100px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Make sure all sections animate dynamically */
+        .visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        a {
+            color: white; /* Setzt die Linkfarbe auf Weiß */
+            text-decoration: none; /* Optional: Entfernt die Unterstreichung */
+        }
+
+        a:hover {
+            color: #ccc; /* Optional: Ändert die Farbe beim Hover-Effekt */
+        }
+
+        html {
+        scroll-behavior: smooth;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(30, 30, 30, 0.9);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+            padding: 10px 20px;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #ff6f61;
+        }
+
+        body {
+            padding-top: 60px; /* Abstand für das Menü, damit der Inhalt nicht verdeckt wird */
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="#Benutzungsart">Benutzungsart</a></li>
+            <li><a href="#AdressSuche">Adresssuche</a></li>
+            <li><a href="#GrundstückePerHandWählen">Grundstücke wählen</a></li>
+            <li><a href="#SondenModellieren">Sonden modellieren</a></li>
+            <li><a href="#PDF">PDF erstellen</a></li>
+            <li><a href="#MehereGrundstücke">Mehrere Grundstücke auswählen</a></li>
+            <li><a href="#FreieGebietswahl">Freie Gebietswahl</a></li>
+        </ul>
+    </nav>
+
+
+    <h1>GERMA Tutorial</h1>
+
+    <section>
+        <div class="content" style="max-width: 1500px;">
+            <h2>Was ist das GERMA-Tool?</h2>
+            <p style="text-align: justify;">
+                Das GERMA-Tool ist eine Applikation, die eine schnelle geothermische Potenzialanalyse für Erdwärmesonden für ein oder mehrere Flurstücke im Land Berlin-Brandenburg erstellen kann.<br><br>
+                Das Tool berechnet dabei, welche Flächen für geothermische Bohrungen nach den offiziellen Abstandsregelungen des Berliner Senats geeignet sind, und modelliert bei Bedarf für diesen Bereich eine optimale technisch und rechtlich maximal mögliche Auslegung geothermischer Sonden bei einem Sondenabstand von 6 Metern.<br><br>
+                Für die gewählte Fläche und die modellierten Sonden werden die wichtigsten geothermischen Parameter berechnet<br>
+                Tiefenbegrenzungen werden ebenfalls berücksichtigt und in die Berechnung einbezogen.
+                Dazu wird für die modellierte Sondenkonstellation wird außerdem der Gesamtentzug aller Sonden berechnet, wobei die gegenseitige Beeinflussung im Erdreich ebenfalls Beachtung findet.<br><br>
+            </p>
+            <p style="text-align: center;">
+                <b>Das GERMA-Tool befindet sich derzeit in der ersten Prototypenphase und ist online geschaltet.<br>
+                Wir freuen uns über Ihr Feedback sowie über Feature- und Bug-Tickets.</b>
+            </p><br>
+            <p style="color: red; text-align: center;">
+                Bitte beachten Sie, dass der generierte Grundlagenbericht zur Nutzung von Erdwärmesonden am ausgewählten Standort keine Gewähr auf Richtigkeit und/oder Vollständigkeit bietet.<br>
+                Die Nutzung und/oder Weitergabe der Angaben und Daten erfolgt auf eigenes Risiko.<br>
+                Grundsätzlich ist für geothermische Kundenanfragen stets die Fachplanung O-GT-T zuständig und durch den Vertrieb einzubeziehen.
+            </p><br>
+            <p style="text-align: center; font-size: 1.3rem;"><a href="https://tkroeger.com/websites/masterarbeit.pdf" target="_blank" style="color: lightgray;"><i>Hier finde Sie außerdem die zugrundliegende Arbeit auf den das Tool aufgebaut wurde</i></a></p>
+        </div>
+        <div class="divider"></div>
+    </section>
+
+    <section id="Benutzungsart">
+        <div class="gif">
+            <video src="video/1.mkv" autoplay loop muted></video>
+        </div>
+        <div class="content">
+            <h2>Wie kann ich das Tool benutzen?</h2>
+            <p>
+                Das Tool ist unter der folgenden Website erreichbar:<br>
+                <a href="https://germa-tool.gs-local.germa.de/" target="_blank">https://germa-tool.gs-local.germa.de/</a><br><br>
+                Zugriff auf das Tool haben alle Mitarbeitenden der XXX-Gruppe. Sie können auf die Website zugreifen, solange Sie sich im internen Netz der XXX befinden.<br><br>
+                Sollten Sie von einem externen Netz auf das GERMA-Tool zugreifen wollen, müssen Sie zunächst Ihren <b>Azure VPN Client</b> aktivieren.
+            </p>            
+        </div>
+        <div class="divider"></div>
+    </section>
+
+    <section id="AdressSuche">
+        <div class="gif">
+            <video src="video/2.mkv" autoplay loop muted></video>
+        </div>
+        <div class="content">
+            <h2>Adresssuche</h2>
+            <p>
+                Das GERMA-Tool unterstützt die Adresssuche auf Basis der OpenStreetMap-Datenbank.<br><br>
+                Um ein gewünschtes Grundstück zu finden, geben Sie einfach die Adresse in die oben angezeigte Adresszeile ein.<br><br>
+                Je genauer die Adresse angegeben wird, desto höher ist die Wahrscheinlichkeit, dass diese korrekt erkannt wird.<br><br>
+                Eine gute Adresssuche enthält idealerweise:<br>
+                <b>Straße + Hausnummer + Postleitzahl + Berlin</b><br><br>
+                Nachdem Sie die Adresse eingegeben haben, bestätigen Sie diese entweder mit der <b>"Enter"</b>-Taste oder durch Klicken auf den <b>"Suchen"</b>-Button.
+            </p>
+        </div>
+        
+
+        <div class="divider"></div>
+    </section>
+
+    <section id="GrundstückePerHandWählen">
+        <div class="gif">
+            <video src="video/3.mkv" autoplay loop muted></video>
+        </div>
+        <div class="content">
+            <h2>Grundstücke manuell auswählen</h2>
+            <p>
+                Alternativ können Sie Grundstücke auch direkt in der Karte auswählen.<br><br>
+                Klicken Sie dazu einfach auf eine beliebige Stelle in der Karte, und das Tool identifiziert das dazugehörige Flurstück.
+            </p>
+        </div>
+        <div class="divider"></div>
+    </section>
+
+    <section id="SondenModellieren">
+        <div class="gif">
+            <video src="video/4.mkv" autoplay loop muted></video>
+        </div>
+        <div class="content">
+            <h2>Erdwärmesonden modellieren</h2>
+            <p>
+                Wenn Sie ein Grundstück markiert haben, bietet Ihnen das Tool am Ende des Dialogs über den Button <b>"Detailed Report"</b> die Möglichkeit, Erdwärmesonden für das Grundstück zu modellieren.<br><br>
+                Die Ausführung dieser Funktion kann etwas Zeit in Anspruch nehmen, da die Sonden berechnet werden. Besonders bei größeren Flächen kann die Rechenzeit ansteigen.<br><br>
+                Nachdem das Sondenfeld modelliert wurde, wird Ihnen auf der Karte eine optimale Verteilung der Geothermie-Sonden entsprechend den geltenden Berliner Abstandsregeln angezeigt.<br><br>
+                Zusätzlich wird der Report mit weiteren Informationen ergänzt. Dieser enthält unter anderem:<br>
+                - Den <b>Entzug für 2.400 Arbeitsstunden</b>, der mit dem Sondenfeld bereitgestellt werden kann.<br>
+                - Die <b>Anzahl der Sonden</b> sowie <b>weitere Einschränkungen</b>.
+            </p>
+        </div>
+        <div class="divider"></div>
+    </section>
+
+    <section id="PDF">
+        <div class="gif">
+            <video src="video/5.mkv" autoplay loop muted></video>
+        </div>
+        <div class="content">
+            <h2>PDF erstellen</h2>
+            <p>
+                Oben rechts im Fenster-Dialog finden Sie einen Button mit der Bezeichnung <b>"Print"</b>.<br><br>
+                Wenn Sie diesen Button betätigen, wird der Inhalt des Fenster-Dialogs in eine PDF-Datei umgewandelt.<br><br>
+                Es wird empfohlen, zuerst die Erdwärmesonden zu modellieren und anschließend den Bericht als PDF zu speichern, damit alle relevanten Informationen in der PDF enthalten sind.
+            </p>
+        </div>
+        
+        <div class="divider"></div>
+    </section>
+
+    <section id="MehereGrundstücke">
+        <div class="gif">
+            <video src="video/6.mkv" autoplay loop muted></video>
+        </div>
+        <div class="content">
+            <h2>Mehrere Grundstücke auswählen</h2>
+            <p>
+                Wenn Sie die <b>"STRG"</b>-Taste gedrückt halten, während Sie Grundstücke anklicken, können Sie die Flurstücke miteinander verknüpfen.<br><br>
+                Alle Berechnungen werden dann für alle gewählten Flurstücke gemeinsam ausgeführt.<br><br>
+                Bitte beachten Sie, dass Sie nur Flurstücke miteinander verbinden können, die sich topologisch berühren. Es ist nicht möglich, getrennte Flächen von Flurstücken auszuwählen. Wenn Sie zwei verschiedene Grundstücke auswerten möchten, müssen Sie dies nacheinander durchführen.<br><br>
+                Bedenken Sie außerdem, dass die Modellierung von Erdwärmesonden bei größeren Grundstücken mehr Zeit in Anspruch nehmen kann.
+            </p>
+        </div>
+        <div class="divider"></div>
+    </section>
+
+    <section id="FreieGebietswahl">
+        <div class="gif">
+            <video src="video/7.mkv" autoplay loop muted></video>
+        </div>
+        <div class="content">
+            <h2>Freie Gebietswahl</h2>
+            <p>
+                Das Tool bietet Ihnen zusätzlich die Möglichkeit, ein eigenes Gebiet zu wählen, falls Sie mit der Darstellung der Flurstücke nicht zufrieden sein sollten.<br><br>
+                Klicken Sie dazu auf das kleine Viereck in der oberen linken Ecke des Tools.<br><br>
+                Sobald Sie dies getan haben, befinden Sie sich im <b>"Edit Mode"</b>. In diesem Modus können Sie durch Klicks den Umriss eines Grundstücks selbst zeichnen.<br><br>
+                Wenn Sie mit dem gewählten Bereich zufrieden sind, klicken Sie auf den <b>"Submit"-Button</b>.<br><br>
+                Optional können Sie für das gewählte Gebiet auch den Mindestabstand zur Außengrenze nicht berechnen lassen. Entfernen Sie dazu den Haken bei <b>"Boundary"</b> und klicken Sie erneut auf <b>"Submit"</b>.<br><br>
+                Um Ihre Auswahl zu löschen und den Edit Mode zu verlassen, klicken Sie auf das <b>"X"</b> links vom Submit-Button.
+            </p>
+        </div>
+        <div class="divider"></div>
+    </section>
+
+    <section>
+        <a href="https://forms.office.com/Pages/ResponsePage.aspx?id=L9UxkQadoUGEutS4pvysCDbIAPNqVStGlCyZplAfPvpUMFcyRkNNRThWNVpOR0lOUVlFR1JLSUlVNS4u">
+            <div class="content">
+                <h2>Feedback</h2>
+                <p>
+                    Bitte geben Sie uns gern Feedback zum Tool, wenn Sie es bereits eine Weile genutzt haben!<br><br>
+                    <b>Klicken Sie dazu einfach auf diese Kachel!</b>
+                </p>
+            </div>
+        </a>
+        <a href="https://gasag.sharepoint.com/:l:/s/GSP_Unternehmensinterna/FIpW0xloCaNLsjQcqo5ne_EBpY_sWlzJUD1YmBt6vQY4og">
+            <div class="content">
+                <h2>Ticket</h2>
+                <p>
+                    Falls Sie Bugs gefunden haben oder weitere Features in das Tool integriert sehen möchten, schreiben Sie uns gern ein Ticket!<br><br>
+                    <b>Klicken Sie dazu einfach auf diese Kachel!</b>
+                </p>
+            </div>
+        </a>
+    </section>
+
+    
+
+    <script>
+        // Scroll Effect for sections
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

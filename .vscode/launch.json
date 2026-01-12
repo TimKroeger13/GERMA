@@ -1,0 +1,34 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "Launch Server",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "cmd.exe",
+            "args": [
+                "/c",
+                "${workspaceFolder}/start.bat"
+            ],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Attach",
+            "type": "coreclr",
+            "request": "attach",
+            "processId": "${command:pickProcess}"
+        },
+        {
+            "name": "WebClient",
+            "type": "pwa-msedge",
+            "request": "launch",
+            "url": "file://${workspaceFolder}/WebClient/GERMAG/index.html",
+            "presentation": {
+                "hidden": false
+            }
+        }
+    ]
+}

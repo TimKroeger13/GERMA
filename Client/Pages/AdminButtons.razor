@@ -1,0 +1,24 @@
+﻿@page "/admin"
+@using GERMAG.Client.Services
+
+<PageTitle>Admin buttons</PageTitle>
+
+<h1>Buttons</h1>
+
+<p role="status">Is updating: @IsUpdateing</p>
+
+<button class="btn btn-primary" @onclick="FetchAllDataRequest">Fetch Data from Fisbroker</button>
+
+@code {
+    [Inject] IUpdateDatabaseService UpdateDatabaseService { get; set; } = default!;
+
+    private string @IsUpdateing = "Not checked";
+
+    private async Task FetchAllDataRequest()
+    {
+        Console.WriteLine("Function clicked");
+
+        await UpdateDatabaseService.checkForUpdates();   
+        IsUpdateing = "Datbase update Complete!";
+    }
+}

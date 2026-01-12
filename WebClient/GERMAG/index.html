@@ -1,0 +1,1689 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <title>GERMA</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="css/styles.css?v=6">
+  <link rel="stylesheet" href="css/BimInput.css?v=6">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js?version={version}"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js?version={version}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js?version={version}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.js?version={version}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js?version={version}"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js?version={version}"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js?version={version}"></script>
+  <script src='https://cdn.plot.ly/plotly-2.32.0.min.js'></script>
+  <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
+  <script src="https://unpkg.com/docx@8.3.0/build/index.umd.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+
+  <script src="geojson/groundwater_measuring_points_4326.js?v=6"></script>
+  <script src="geojson/drilling_points_4326.js?v=6"></script>
+  <script src="geojson/Tense_4326.js?v=6"></script>
+  <script src="geojson/WaterProc_4326.js?v=6"></script>
+  <script src="geojson/DepthRegulation_4326.js?v=6"></script>
+  <script src="geojson/BerlinBorders_4326.js?v=6"></script>
+  <script src="geojson/natureMemorial_4326.js?v=6"></script>
+  <script src="geojson/naturProtecArea_4326.js?v=6"></script>
+  <script src="geojson/biotop_4326.js?v=6"></script>
+
+  <script src="Latex.js?v=6"></script>
+  <script src="js.js?v=6"></script>
+  <script src="apiRequests.js"></script>
+  <script src="worldExport.js?v=6"></script>
+  <script src="fp.js?v=6"></script>
+
+</head>
+
+<body>
+
+  <div id="loading-overlay">
+    <div class="spinner"></div>
+    <p>Loading</p>
+    <div id="progress-container">
+      <div id="progress-bar"></div>
+      <span id="progress-text"></span>
+    </div>
+  </div>
+
+  <div class="inputFormula" id="excelCodeOverlay">
+  <form onsubmit="return false;">
+    <h2>Excel Code</h2>
+    <div style="margin-bottom: 1.5rem;">
+      <pre id="excelCodeText" title="Klicken zum Kopieren" style="background:#f6f6f6; border-radius:4px; padding:1rem; cursor:pointer; white-space:pre-wrap; user-select:all; font-family:monospace; font-size:16px; min-height:40px; text-align:left; margin:0;"
+        onclick="copyExcelCodeToClipboard()"></pre>
+      <div id="copiedMsg" style="color: #007bff; text-align:right; font-size:0.95rem; display: none;">Kopiert!</div>
+    </div>
+    <div style="width:100%; text-align:center;">
+      <button type="button" class="CancelButton" onclick="disableExcelCodeOverlay()">Schließen</button>
+    </div>
+  </form>
+</div>
+
+
+  <div id="inputFormulaBIM" class="inputFormula">
+    <form id="bimForm">
+      <h2>BIM Report Information</h2>
+
+      <label for="pasteExcel">Excel Daten einfügen:</label>
+      <textarea id="pasteExcel" placeholder="1 Töpchiner Weg 44,46,48 Neukölln 12349 616.3 451349 Gas 134"></textarea>
+      <button type="button" class="ParseButton" onclick="parseExcelData()">Einfügen</button>
+
+      <div class="fields-container">
+        <label for="lfd.Nr.">lfd.Nr.:</label>
+        <input type="number" id="Form_lfdNr" name="lfd.Nr." required />
+
+        <label for="wirtschaftseinheit">Wirtschaftseinheit:</label>
+        <input type="text" id="Form_wirtschaftseinheit" name="wirtschaftseinheit" required />
+
+        <label for="bezirk">Bezirk:</label>
+        <input type="text" id="Form_bezirk" name="bezirk" required />
+
+        <label for="postleitzahl">Postleitzahl:</label>
+        <input type="number" id="Form_postleitzahl" name="postleitzahl" required />
+
+        <label for="grundstuecksflaeche">Grundstücksfläche (m²):</label>
+        <input type="number" id="Form_grundstuecksflaeche" name="grundstuecksflaeche" required />
+
+        <label for="flurstuecksnummer">Flurstücks-Nummer:</label>
+        <input type="text" id="Form_flurstuecksnummer" name="flurstuecksnummer" required />
+
+        <label for="waermeverbrauch">Wärmeverbrauch (kWh/a):</label>
+        <input type="number" id="Form_waermeverbrauch" name="waermeverbrauch" required />
+
+        <label for="energietraeger">Vorwiegender Energieträger:</label>
+        <input type="text" id="Form_energietraeger" name="energietraeger" required />
+
+        <label for="maxBohrtiefe">Maximale Technische Bohrtiefe (m):</label>
+        <input type="number" id="Form_maxBohrtiefe" name="maxBohrtiefe" value="400" required />
+
+        <label for="remark1">Erste Anmerkung:</label>
+        <input type="text" id="Form_remark1" name="remark1" />
+
+        <label for="remark2">Zweite Anmerkung:</label>
+        <input type="text" id="Form_remark2" name="maxBohrtiefe" />
+
+        <label for="OutputTypeSelect">Output:</label>
+        <select id="OutputTypeSelect" class="selection-dropdown">
+          <option value="LATEX">LaTeX</option>
+          <option value="PDF">PDF</option>
+        </select>
+
+      </div>
+
+      <div class="form-buttons">
+        <button type="button" class="CancelButton" onclick="hideInputFormulaBim()">Cancel</button>
+        <button type="button" class="CreatelatexButton" onclick="downloadLatexProject('BIM')">Report</button>
+      </div>
+    </form>
+  </div>
+
+  <div id="inputFormulaInternal" class="inputFormula">
+    <form id="InternalForm">
+      <h2>Internal Report Information</h2>
+
+      <div class="fields-container">
+        <label for="wirtschaftseinheit">Adresse/Name:</label>
+        <input type="text" id="Form_Internal_wirtschaftseinheit" name="wirtschaftseinheit" required />
+
+        <label for="bezirk">Bezirk:</label>
+        <input type="text" id="Form_Internal_bezirk" name="bezirk" required />
+
+        <label for="postleitzahl">Postleitzahl:</label>
+        <input type="number" id="Form_Internal_postleitzahl" name="postleitzahl" required />
+
+        <label for="flurstuecksnummer">Flurstücks-Nummer:</label>
+        <input type="text" id="Form_Internal_flurstuecksnummer" name="flurstuecksnummer" required />
+
+        <label for="remark1">Erste Anmerkung:</label>
+        <input type="text" id="Form_Internal_remark1" name="remark1" />
+
+        <label for="remark2">Zweite Anmerkung:</label>
+        <input type="text" id="Form_Internal_remark2" name="maxBohrtiefe" />
+
+        <label for="OutputTypeSelect">Output:</label>
+        <select id="OutputTypeSelectInternal" class="selection-dropdown">
+          <option value="PDF">PDF</option>
+          <option value="LATEX">LaTeX</option>
+        </select>
+
+      </div>
+
+      <div class="form-buttons">
+        <button type="button" class="CancelButton" onclick="hideInputFormulaInternal()">Cancel</button>
+        <button type="button" class="CreatelatexButton" onclick="downloadLatexProject('Internal')">Report</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="z-index: 1050;">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="display: flex; align-items: center;">
+          <div class="col-xs-6 custom-modal-title">
+            <h4 class="modal-title ms-0 me-auto" id="myModalLabel">Bericht Geothermie Erdwärmesonden</h4>
+          </div>
+          <div class="col-xs-6 text-right">
+            <button type="button" class="btn btn-default print-btn" onclick="exportWorld()">Druck</button>
+            <!-- PrintPDF() -->
+          </div>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+              aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <p>Report is loading...</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default print-btn full-width-btn"
+            onclick="ShowDetailedReport()">Auswertung
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div id="address-bar">
+      <div id="branding">
+        <span id="branding-text">GERMA</span>
+      </div>
+      <input type="text" id="address-input" placeholder="Type an address..." onkeypress="handleKeyPress(event)">
+      <button onclick="searchAddress()">Suchen</button>
+    </div>
+
+    <div id="functions">
+      <div class="functions-inner">
+
+        <!-- LEFT BUTTONS -->
+        <div class="information-container left-section">
+          <button id="btnClear" class="Iconbutton" onclick="clearSelected()" title="Deselect all areas">
+            <img src="pic/clear.svg" alt="Icon">
+          </button>
+          <button id="btnNewArea" class="Iconbutton" onclick="modeNewArea()" title="Create new area">
+            <img src="pic/newArea.svg" alt="Icon">
+          </button>
+          <button id="btnMinusArea" class="Iconbutton" onclick="modeMinusArea()" title="Create negative area" disabled>
+            <img src="pic/minusArea.svg" alt="Icon">
+          </button>
+          <button id="btnAddSuperiorArea" class="Iconbutton" onclick="modeSuperiorArea()" title="Add superior Area" disabled>
+            <img src="pic/plusArea.svg" alt="Icon">
+          </button>
+          <button id="btnDissolveArea" class="Iconbutton" onclick="dissolveArea()" title="Dissiovle Area">
+            <img src="pic/union.svg" alt="Icon">
+          </button>
+          <!--
+      <button id="btnAddArea" class="Iconbutton" onclick="AddArea()" title="Add to exsisting area">
+        <img src="pic/plusArea.svg" alt="Icon">
+      </button>
+          <button id="btnSubtractArea" class="Iconbutton" onclick="SubtractArea()" title="Substract from exsistig area">
+            <img src="pic/minusArea.svg" alt="Icon">
+          </button>-->
+          <button id="btnSubmit" class="InformationButton" onclick="ShowDetailedReport('custom')"
+            title="Submit corrently displayed area">Eigene Fläche Berechnen
+          </button>
+          <span class="VerticalDivider"></span>
+          <div class="InputGroup">
+            <span class="InputLabel">EWS-Abstand:</span>
+            <input id="numInput" class="NumberInputField" type="number" min="6" max="30" step="0.5" value="6"
+              title="Enter EWS distance here (Number between 6 - 30)">
+          </div>
+          <div class="InputGroup">
+            <span class="InputLabel">Abstand-Flurgrenze:</span>
+            <input id="FlurInput" class="NumberInputField" type="number" min="0" max="20" step="0.5" value="2"
+              title="Enter Land Parcel distance here (Number between 0 - 20)">
+          </div>
+          <div class="InputGroup">
+            <span class="InputLabel">Baumkronen-Puffer:</span>
+            <input id="TreeInput" class="NumberInputField" type="number" min="-10" max="10" step="0.5" value="0"
+              title="Enter Tree Buffer distance here (Number between -10 - 10)">
+          </div>
+          <div class="InputGroup">
+            <span class="InputLabel">EWS-Mindestanzahl:</span>
+            <input id="EwsNumberInput" class="NumberInputField" type="number" min="0" max="1000" step="1" value="0"
+              title="Enter minimal EWS for a subarea here">
+          </div>
+          <div class="InputGroup">
+            <span class="InputLabel">Maximale Bohrtiefe:</span>
+            <input id="MaxEWSDrillingDepthInput" class="NumberInputField" type="number" min="0" max="400" step="5"
+              value="400" title="Enter maximale drilling depth of BHE here">
+          </div>
+          <div class="InputGroup">
+            <span class="InputLabel">COP:</span>
+            <input id="COPInput" class="NumberInputField" type="number" min="2" max="9999" step="0.1" value="4"
+              title="Enter the COP for the heat pump">
+          </div>
+          <div class="InputGroup">
+            <span class="InputLabel">Gebäude entfernen:</span>
+            <label class="ToggleSwitch">
+              <input type="checkbox" id="toggleBuilding">
+              <span class="Slider"></span>
+            </label>
+          </div>
+          <div class="InputGroup">
+            <span class="InputLabel">Bäume entfernen:</span>
+            <label class="ToggleSwitch">
+              <input type="checkbox" id="toggleTrees">
+              <span class="Slider"></span>
+            </label>
+          </div>
+          <div class="InputGroup">
+            <span class="InputLabel">Maximale Sondenfeldgröße:</span>
+            <label class="ToggleSwitch">
+              <input type="checkbox" id="toggleEWSFieldSize">
+              <span class="Slider"></span>
+            </label>
+          </div>
+          <div class="dropdown" id="exportDropdown" style="z-index: 1060;">
+            <button class="InformationButton dropdown-toggle" onclick="toggleDropdown()"
+              id="exportButtonMain">Export</button>
+            <div class="dropdown-content">
+              <button onclick="ExportToGeojson()">Qgis-Export</button>
+              <button onclick="showInputFormulaInternal()">Internal-Export</button>
+              <button onclick="showInputFormulaBim()">Bim-Export</button>
+            </div>
+          </div>
+
+          <button id="buttonInformation" class="InformationButton" onclick="OpenGoogleMaps()"
+            title="Export GEOjson to Qgis">OpenGoogleMaps</button>
+
+          <!--
+          <button id="buttonInformation" class="InformationButton" onclick="ForceByPostApi()"
+            title="Foce Expor as Post">ForcePostAPI</button>-->
+        </div>
+
+        <!-- RIGHT BUTTONS -->
+        <div class="information-container right-section">
+          <!--
+          <button class="InformationButton" onclick="OpenInformationSite()" title="Tutorial zum bedienen von GERMA">
+            <img src="pic/IconInformation.png" alt="Icon">
+            Tutorial
+          </button>-->
+          <button class="InformationButton" onclick="OpenFeedbackSite()" title="Geben Sie uns Feedback!">
+            <img src="pic/IconFeedback.png" alt="Icon">
+            Feedback Umfrage
+          </button>
+          <button class="InformationButton" onclick="OpenFeatureSite()" title="Tickets erstellen">
+            <img src="pic/IconBug.png" alt="Icon">
+            Features und Bugs Tickets
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="map"></div>
+  </div>
+
+  <script>
+
+    var map;
+    var L;
+    var ZoomMax = 23; // Allows zooming to level 21
+    var ZoomVegeationLimit = 15;
+    var NativeMaxZoom = 19;
+
+    const sharedCanvasRenderer = L.canvas();
+
+    document.getElementById('btnSubmit').disabled = true;
+
+    var SelectedMode = 0; // 0 = normal, 1 = new area, 2 = add area, 3 = subtract area
+
+    let geoJsonList = [];
+
+    map = L.map('map', {
+      zoomSnap: 0,
+      zoomDelta: 0.1,
+      keyboard: false
+    }).setView([52.52, 13.40], 12);
+    window.myMap = map;
+
+    L.control.scale({
+      metric: true,
+      imperial: false,
+      maxWidth: 200
+    }).addTo(map);
+
+    let dynamicLayerGroup = L.featureGroup().addTo(map);
+    let treeLayerGroup = L.featureGroup();
+    let drillPointLayerGroup = L.featureGroup();
+
+    let restrictionPlaceholderLayerGroup = L.featureGroup();
+    let Res_WaterProcLayerGroup = L.featureGroup();
+    let Res_RestrictionLayerGroup = L.featureGroup();
+    let Res_tenseLayerGroup = L.featureGroup();
+
+    let MinorProtectionPlaceholderLayerGroup = L.featureGroup();
+    let Res_natureMemorialLayerGroup = L.featureGroup();
+    let Res_naturProctecAreaLayerGroup = L.featureGroup();
+    let Res_biotopLayerGroup = L.featureGroup();
+
+    document.getElementById('exportDropdown').classList.add('disabled')
+
+    const waterQualityClusterGroup = L.markerClusterGroup({
+      chunkedLoading: true, // boosts performance on large datasets
+      maxClusterRadius: 40,  // adjust if you want tighter/looser clustering
+      spiderfyOnMaxZoom: true,
+      showCoverageOnHover: false,
+      zoomToBoundsOnClick: false
+    })
+
+    waterQualityClusterGroup.on('clusterclick', function (a) {
+      a.layer.spiderfy();
+    });
+
+    const drillPointClusterGroup = L.markerClusterGroup({
+      chunkedLoading: true, // boosts performance on large datasets
+      maxClusterRadius: 10,  // adjust if you want tighter/looser clustering
+      spiderfyOnMaxZoom: true,
+      showCoverageOnHover: false,
+      zoomToBoundsOnClick: false
+    })
+
+    drillPointClusterGroup.on('clusterclick', function (a) {
+      a.layer.spiderfy();
+    });
+
+    var baseLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: ZoomMax, // Max zoom level for the map
+      maxNativeZoom: NativeMaxZoom, // Maximum zoom level for which tiles are available
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(map);
+    var popup = L.popup();
+
+    var baseLayerLightColor = L.tileLayer(
+      'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      subdomains: 'abcd',
+      maxZoom: ZoomMax,
+      attribution: '&copy; <a href="https://carto.com/attributions">CARTO</a> &copy; OpenStreetMap contributors'
+    })//.addTo(map);
+
+    var esriSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles © Esri — Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community',
+      maxZoom: 23,
+      maxNativeZoom: 20
+    });
+
+    /*
+    var wmsLayerVegetation = L.tileLayer.wms('https://fbinter.stadt-berlin.de/fb/wms/senstadt/k_06_10_2veghoehe?', {
+      layers: '3', // Internal name for the "Vegetationshöhen 2020 (Raster)" layer
+      format: 'image/png',
+      transparent: true,
+      opacity: 0.5,
+      attribution: '&copy; <a href="http://www.stadtentwicklung.berlin.de/geoinformation/fis-broker/">Senatsverwaltung für Stadtentwicklung, Bauen und Wohnen Berlin</a>',
+      crs: L.CRS.EPSG4326, // Coordinate Reference System
+      minZoom: ZoomVegeationLimit, // Adjust these zoom levels as needed
+      maxZoom: ZoomMax, // Max zoom level for the map
+      maxNativeZoom: NativeMaxZoom // Maximum zoom level for which WMS tiles are available
+    }).addTo(map);
+    */
+
+    /*
+    var wmsLayerFlurstuecke = L.tileLayer.wms('https://gdi.berlin.de/services/wms/alkis_flurstuecke?', {
+      layers: 'flurstuecke', // Layer name from the WMS capabilities
+      format: 'image/png', // Common web-compatible format
+      transparent: true,
+      maxZoom: ZoomMax,
+      opacity: 1,
+      attribution: '&copy; <a href="https://www.stadtentwicklung.berlin.de/geoinformation/gdi/">Senatsverwaltung für Stadtentwicklung, Bauen und Wohnen Berlin</a>',
+      crs: L.CRS.EPSG25833, // CRS used by the layer, or EPSG:3857 if your map uses that
+      version: '1.3.0'
+    }).addTo(map);*/
+
+
+    /*
+    var wmsLayerFlurstuecke = L.tileLayer.wms('https://gdi.berlin.de/services/wms/cp_alkis?', {
+      layers: 'CP.CadastralParcel',      
+      format: 'image/png',
+      transparent: true,
+      version: '1.3.0',        
+      attribution: '&copy; <a href="https://www.stadtentwicklung.berlin.de/geoinformation/gdi/">Berlin GDI</a>',
+      crs: L.CRS.EPSG4326,       
+      maxNativeZoom: 16 
+    }).addTo(map);*/
+
+    var wmsLayerFlurstuecke = L.tileLayer.wms('https://gdi.berlin.de/services/wms/cp_alkis?', {
+      layers: 'CP.CadastralParcel',
+      format: 'image/png',
+      transparent: true,
+      version: '1.3.0',
+      attribution: '&copy; <a href="https://www.stadtentwicklung.berlin.de/geoinformation/gdi/">Berlin GDI</a>',
+      crs: L.CRS.EPSG4326,
+      maxZoom: 23,        // Allow map to zoom higher
+      maxNativeZoom: 20,  // But only request new tiles up to level 20
+      keepBuffer: 2       // Keep tiles in memory for smoother experience
+    }).addTo(map);
+
+  var wmsALKIS = L.tileLayer.wms('https://gdi.berlin.de/services/wms/alkis?', {
+      layers: 'a_alkis_raster',
+      format: 'image/png',
+      transparent: true,
+      version: '1.3.0',
+      attribution: '&copy; <a href="https://www.stadtentwicklung.berlin.de/geoinformation/gdi/">Senatsverwaltung für Stadtentwicklung, Bauen und Wohnen Berlin</a>',
+      crs: L.CRS.EPSG4326,
+      maxZoom: 23,
+      maxNativeZoom: 20,
+      keepBuffer: 2
+    }).addTo(map);
+
+    var baseMaps = {
+      "OpenStreetMap": baseLayer,
+      "Modern": baseLayerLightColor,
+      "Satellit (Esri)": esriSat,
+    };
+
+    map.removeLayer(wmsLayerFlurstuecke);
+    map.removeLayer(wmsALKIS);
+
+    var overlayMaps = {
+      "ALKIS Berlin": wmsALKIS,
+      "Flurstücke": wmsLayerFlurstuecke,
+      "Baumkronen": treeLayerGroup,
+      "Bohrungen": drillPointClusterGroup,
+      "Grundwasserqualität": waterQualityClusterGroup,
+      "Restriktionsgebiete": restrictionPlaceholderLayerGroup,
+      "Schutzgebiete": MinorProtectionPlaceholderLayerGroup
+    };
+
+    // Add layer control to the map (top right by default)
+    L.control.layers(baseMaps, overlayMaps, {
+      collapsed: false // set to true if you want it collapsible
+    }).addTo(map);
+
+    var wmsBounds = L.latLngBounds(
+      L.latLng(52.3284, 13.079), // SouthWest corner
+      L.latLng(52.6877, 13.7701) // NorthEast corner
+    );
+
+    map.on('click', function (e) {
+      if (SelectedMode == 0) {
+        if (e.originalEvent.ctrlKey) {
+          onMapClickWithCtrl(e);
+        } else {
+          onMapClick(e);
+        }
+      }
+      if (SelectedMode == 1) {
+        onMapClickAddArea(e);
+      }
+      if (SelectedMode == 2) {
+        onMapClickAddMinusArea(e);
+      }
+      if (SelectedMode == 3) {
+        onMapClickWithSuperiorArea(e);
+      }
+
+    });
+
+    map.on('contextmenu', async function (e) {
+      await onRightClick(e);
+      await removeLandParcels();
+
+    });
+
+    map.on('moveend', () => {
+      fetchAndRenderVectorData();
+    });
+
+    //Tree
+
+    map.on('overlayadd', function (event) {
+      if (event.layer === treeLayerGroup) { //if (event.layer === treeLayerGroup || event.layer === drillPointLayerGroup) {
+        fetchAndRenderVectorData();
+      }
+    });
+
+    map.on('overlayremove', function (event) {
+      if (event.layer === treeLayerGroup) {
+        treeLayerGroup.clearLayers();
+      }
+    });
+
+    //DrillingData
+    map.on('overlayadd', function (event) {
+      if (event.layer === drillPointClusterGroup) {
+        loadDrillingVectorData();
+      }
+    });
+
+    map.on('overlayremove', function (event) {
+      if (event.layer === drillPointClusterGroup) {
+        RemoveDrillPointLayerFromMap()
+      }
+    });
+
+    //Water Quality
+
+    map.on('overlayadd', function (event) {
+      if (event.layer === waterQualityClusterGroup) {
+        loadGroundWaterVectorData();
+      }
+    });
+
+    map.on('overlayremove', function (event) {
+      if (event.layer === waterQualityClusterGroup) {
+        RemoveLayerGroundWater()
+      }
+    });
+
+    //Restriction
+
+    map.on('overlayadd', function (event) {
+      if (event.layer === restrictionPlaceholderLayerGroup) {
+        AddProtectionArea();
+      }
+    });
+
+    map.on('overlayremove', function (event) {
+      if (event.layer === restrictionPlaceholderLayerGroup) {
+        Res_WaterProcLayerGroup.clearLayers()
+        Res_RestrictionLayerGroup.clearLayers()
+        Res_tenseLayerGroup.clearLayers()
+      }
+    });
+
+    map.on('overlayadd', function (event) {
+      if (event.layer === MinorProtectionPlaceholderLayerGroup) {
+        AddFurtherProtectionAreas();
+      }
+    });
+
+    map.on('overlayremove', function (event) {
+      if (event.layer === MinorProtectionPlaceholderLayerGroup) {
+        Res_natureMemorialLayerGroup.clearLayers()
+        Res_naturProctecAreaLayerGroup.clearLayers()
+        Res_biotopLayerGroup.clearLayers()
+      }
+    });
+
+    //legend Update
+
+    map.on('overlayadd overlayremove', function () {
+      updateDynamicLegend();
+    });
+
+    function changeCursor(cursorStyle) {
+      map.getContainer().style.cursor = cursorStyle;
+    }
+
+    async function removeLandParcels() {
+      dynamicLayerGroup.clearLayers();
+    }
+
+    async function CreateLandParcel(landParcelGeometry, fillColor, color, weight, opacity, fillOpacity) {
+      const geoJsonLayer = L.geoJSON(landParcelGeometry, {
+        renderer: sharedCanvasRenderer,
+        style: function (feature) {
+          return {
+            fillColor: fillColor,
+            color: color,
+            weight: weight,
+            opacity: opacity,
+            fillOpacity: fillOpacity,
+          };
+        },
+      });
+
+      geoJsonLayer.eachLayer(layer => {
+        layer._originalStyle = {
+          fillOpacity: layer.options.fillOpacity,
+          opacity: layer.options.opacity,
+        };
+      });
+
+      // Add to dynamic group
+      geoJsonLayer.addTo(dynamicLayerGroup);
+    }
+
+    async function CreateAllPoints(T_ProbePointsGeometry) {
+      const baseSize = 10;      // px, default marker size at base zoom
+      const minSize = 5;        // px, minimum marker size
+      const baseZoom = 18;      // reference zoom level
+
+      const markers = [];       // So we can update later
+
+      // Helper function: size based on zoom
+      function getSizeForZoom(zoom) {
+        let scale;
+        if (zoom <= baseZoom) {
+          scale = 1 - (baseZoom - zoom) * 0.2; // shrink for zooms < baseZoom
+        } else {
+          scale = 1 + (zoom - baseZoom) * 0.2; // grow for zooms > baseZoom
+        }
+        let size = Math.round(baseSize * scale);
+        if (size < minSize) size = minSize;
+        return size;
+      }
+
+      // Create markers
+      T_ProbePointsGeometry.features.forEach(feature => {
+        const coords = feature.geometry.coordinates;
+        const zoom = map.getZoom();
+        const size = getSizeForZoom(zoom);
+        const anchor = size / 2;
+
+        const svg = `
+          <svg width="${size}" height="${size}" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="8" cy="8" r="6" stroke="#262626" stroke-width="3" fill="#E7732D" />
+          </svg>
+        `;
+
+        const marker = L.marker([coords[1], coords[0]], {
+          icon: L.divIcon({
+            className: 'svg-marker',
+            html: svg,
+            iconSize: [size, size],
+            iconAnchor: [anchor, anchor]
+          })
+        }).addTo(dynamicLayerGroup);
+
+        markers.push(marker);
+      });
+
+      // Function to update marker sizes on zoom
+      function updateMarkerScale() {
+        const zoom = map.getZoom();
+        const size = getSizeForZoom(zoom);
+        const anchor = size / 2;  // Calculate new anchor
+
+        markers.forEach(marker => {
+          // Create a new icon with updated size and anchor
+          const svg = `
+            <svg width="${size}" height="${size}" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="8" cy="8" r="6" stroke="#262626" stroke-width="3" fill="#E7732D" />
+            </svg>
+          `;
+
+          const newIcon = L.divIcon({
+            className: 'svg-marker',
+            html: svg,
+            iconSize: [size, size],
+            iconAnchor: [anchor, anchor]
+          });
+
+          // Replace the icon (this forces Leaflet to recalculate position)
+          marker.setIcon(newIcon);
+        });
+      }
+
+      // Initial scale
+      updateMarkerScale();
+
+      // Update on zoom
+      map.on('zoomend', updateMarkerScale);
+    }
+
+    async function AddGeoJson(geoJsonFeature, color) {
+      let layer = L.geoJSON(geoJsonFeature, {
+        style: feature => {
+          // only applies to LineString/Polygon
+          return color ? { color } : {};
+        }
+      }).addTo(map);
+
+      layer.addTo(dynamicLayerGroup);
+    }
+
+    //Address Postion
+    async function flyToPoint(x, y) {
+      var targetLatLng = L.latLng(x, y);
+      map.flyTo(targetLatLng, 18);
+    }
+
+    //Search address
+    async function searchAddress() {
+      clearSelected();
+      var addressInput = document.getElementById('address-input');
+      var addressValue = addressInput.value;
+      await clearAllForms();
+
+      addressValue = addressValue.replace(/\t/g, ' ');
+      document.getElementById('address-input').value = addressValue;
+
+      if (addressValue != "") {
+        await getGeojsonFromAddress(addressValue)
+      }
+    }
+
+    async function SetReport(html) {
+      GeothermalReport = html;
+    }
+
+    async function GetReport() {
+      return GeothermalReport;
+    }
+
+    async function SetMode(set) {
+      SelectedMode = set;
+    }
+
+    async function GetMode() {
+      return SelectedMode;
+    }
+
+    document.addEventListener('contextmenu', function (event) {
+      event.preventDefault(); // Prevent the default context menu from appearing
+
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.ctrlKey && event.key === 'z') {
+        event.preventDefault(); // Prevent the default undo action
+        popEditGeometryList();
+      }
+    });
+
+    changeCursor('default')
+
+
+    const input = document.getElementById("numInput");
+
+    input.addEventListener("input", () => {
+      let val = parseFloat(input.value);
+
+      if (isNaN(val)) return;
+
+      if (val < 1) input.value = 1;
+      if (val > 30) input.value = 30;
+    });
+
+    const FlurInput = document.getElementById("FlurInput");
+
+    FlurInput.addEventListener("input", () => {
+      let val = parseFloat(FlurInput.value);
+
+      if (isNaN(val)) return;
+
+      if (val < 0) FlurInput.value = 0;
+      if (val > 20) FlurInput.value = 20;
+    });
+
+    const TreeInput = document.getElementById("TreeInput");
+
+    TreeInput.addEventListener("input", () => {
+      let val = parseFloat(TreeInput.value);
+
+      if (isNaN(val)) return;
+
+      if (val < -10) TreeInput.value = -10;
+      if (val > 10) TreeInput.value = 10;
+    });
+
+    const EwsNumberInput = document.getElementById("EwsNumberInput");
+
+    EwsNumberInput.addEventListener("input", () => {
+      let val = parseFloat(EwsNumberInput.value);
+
+      if (isNaN(val)) return;
+      if (val < -0) EwsNumberInput.value = -0;
+    });
+
+    const MaxEWSDrillingInput = document.getElementById("MaxEWSDrillingDepthInput");
+
+    MaxEWSDrillingInput.addEventListener("input", () => {
+      let val = parseFloat(MaxEWSDrillingInput.value);
+
+      if (isNaN(val)) return;
+      if (val < 0) MaxEWSDrillingInput.value = 0;
+      if (val > 400) MaxEWSDrillingInput.value = 400;
+    });
+
+    const COPInput = document.getElementById("COPInput");
+
+    COPInput.addEventListener("input", () => {
+      let val = parseFloat(COPInput.value);
+
+      if (isNaN(val)) return;
+      if (val < 2) COPInput.value = 2;
+      if (val > 10000) COPInput.value = 9999;
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        ShowDetailedReport();
+      }
+    });
+
+    function zoomToGeoJsonList() {
+      if (dynamicLayerGroup.getLayers().length === 0) return;
+
+      const bounds = dynamicLayerGroup.getBounds();
+      map.fitBounds(bounds, {
+        animate: false,
+        padding: [20, 20]
+      });
+    }
+
+    async function captureLeafletMap() {
+      const mapElement = document.getElementById("map");
+      const canvas = await html2canvas(mapElement, {
+        useCORS: true,
+        logging: false,
+        scale: 2
+      });
+
+      const imageWidth = canvas.width;
+      const imageHeight = canvas.height;
+
+      const buffer = await new Promise((resolve) => {
+        canvas.toBlob((blob) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result); // returns ArrayBuffer
+          reader.readAsArrayBuffer(blob);
+        }, "image/jpeg");
+      });
+
+      return {
+        buffer,
+        imageWidth,
+        imageHeight,
+      };
+    }
+
+    function hideLeafletControls() {
+      const controlLayers = document.querySelector(".leaflet-control-layers");
+      removeZoomControl();
+      document.querySelector('.leaflet-control-attribution').style.display = 'none';
+      if (controlLayers) controlLayers.style.display = "none";
+    }
+
+    function showLeafletControls() {
+      const controlLayers = document.querySelector(".leaflet-control-layers");
+      addZoomControl();
+      document.querySelector('.leaflet-control-attribution').style.display = '';
+      if (controlLayers) controlLayers.style.display = "";
+    }
+
+    zoomControl = null;
+    function removeZoomControl() {
+      if (zoomControl) {
+        map.removeControl(zoomControl);
+        zoomControl = null;
+      }
+    }
+
+    function addZoomControl() {
+      removeZoomControl(map);
+
+      zoomControl = L.control.zoom({ position: 'topleft' });
+      map.addControl(zoomControl);
+    }
+
+
+    function showLoadingOverlay(text) {
+      document.querySelector("#loading-overlay p").innerText = text;
+      document.getElementById("loading-overlay").style.display = "flex";
+    }
+
+    function hideLoadingOverlay() {
+      document.getElementById("loading-overlay").style.display = "none";
+    }
+
+    function showInputFormulaBim() {
+      document.getElementById("inputFormulaBIM").style.display = "flex";
+      //document.getElementById("Form_waermeverbrauch").value = document.getElementById('waermebedarfInput').value*1000;
+    }
+
+    function hideInputFormulaBim() {
+      document.getElementById("inputFormulaBIM").style.display = "none";
+    }
+
+    function showInputFormulaInternal() {
+      document.getElementById("inputFormulaInternal").style.display = "flex";
+      document.getElementById("Form_Internal_flurstuecksnummer").value = LastReportData.land_parcel_number;
+
+      var AdressInput = document.getElementById("address-input");
+
+      if(AdressInput != null && AdressInput != ""){
+        document.getElementById("Form_Internal_wirtschaftseinheit").value = AdressInput.value;
+      }
+
+      
+
+      
+      
+    }
+
+    function hideInputFormulaInternal() {
+      document.getElementById("inputFormulaInternal").style.display = "none";
+    }
+
+    function updateLoadingProgress(current, total) {
+      const progressBar = document.getElementById('progress-bar');
+      const percent = total === 0 ? 0 : Math.round((current / total) * 100);
+
+      progressBar.style.width = percent + '%';
+    }
+
+
+
+    const wmsLayers = [baseLayer, esriSat, wmsLayerFlurstuecke]; //const wmsLayers = [baseLayer, esriSat, wmsLayerVegetation, wmsLayerFlurstuecke];
+
+    function waitForVisibleWmsLayersToLoad() {
+      const activeLayers = wmsLayers.filter(layer => map.hasLayer(layer));
+
+      if (activeLayers.length === 0) return Promise.resolve(); // nothing to wait for
+
+      return new Promise((resolve) => {
+        let remaining = activeLayers.length;
+
+        activeLayers.forEach(layer => {
+          const onLoad = () => {
+            layer.off("load", onLoad);
+            remaining--;
+            if (remaining === 0) resolve();
+          };
+
+          layer.on("load", onLoad);
+        });
+      });
+    }
+
+    async function addTreeLayerToMap(treeGeoJsonFeature) {
+      // Clear previous tree vector layers
+      treeLayerGroup.clearLayers();
+
+      // Create Leaflet GeoJSON layer
+      const treeLayer = L.geoJSON(treeGeoJsonFeature, {
+        renderer: sharedCanvasRenderer,
+        style: {
+          color: "green",
+          fillColor: "#228B22",
+          fillOpacity: 0.2,
+          weight: 1
+        }
+      });
+
+      // Add to group and map (if not already added)
+      treeLayerGroup.addLayer(treeLayer);
+
+      if (!map.hasLayer(treeLayerGroup)) {
+        treeLayerGroup.addTo(map);
+      }
+    }
+
+    async function RemoveTreeLayerFromMap() {
+      treeLayerGroup.clearLayers();
+    }
+
+    const BerlinBorderGeojson = L.geoJSON(BerlinBorders_4326, {
+      renderer: sharedCanvasRenderer, // optional if you want custom rendering
+      style: function (feature) {
+        return {
+          color: '#000000',
+          weight: 1,
+          opacity: 1,
+          fillOpacity: 0,
+        };
+      }
+    }).addTo(map);
+
+    async function addDrillPointLayerToMap(drillFeaturesGeoJson) {
+      // Inject CSS once for scalable marker
+      if (!document.getElementById("scale-drill-marker-style")) {
+        const style = document.createElement("style");
+        style.id = "scale-drill-marker-style";
+        style.innerHTML = `
+        .scale-drill-marker {
+        width: 10px;
+        height: 10px;
+        background-image: url('pic/bhe.svg');
+        background-size: contain;
+        background-repeat: no-repeat;
+        transform-origin: center center;
+      }
+    `;
+        document.head.appendChild(style);
+      }
+
+      // Clear previous markers
+      drillPointClusterGroup.clearLayers();
+
+      // Add new markers
+      drillFeaturesGeoJson.features.forEach(feature => {
+        const coords = feature.geometry.coordinates;
+        const entteufe = feature.properties.endteufe;
+
+        // Choose image based on depth
+        const iconUrl = entteufe != null && entteufe <= 100
+          ? 'pic/drill_100.svg'
+          : 'pic/drill_deep.svg';
+
+        const marker = L.marker([coords[1], coords[0]], {
+          icon: L.divIcon({
+            className: '',
+            html: `<div class="scale-drill-marker" style="background-image: url('${iconUrl}');"></div>`,
+            iconAnchor: [5, 5]
+          })
+        }).addTo(drillPointClusterGroup);
+
+        //Popup
+        const link = feature.properties.profil;
+
+        if (link) {
+          marker.on('click', () => {
+            window.open(link, '_blank');
+          });
+        }
+      });
+
+
+      if (!map.hasLayer(drillPointClusterGroup)) {
+        drillPointClusterGroup.addTo(map);
+      }
+
+      // Zoom scaling logic
+      function updateDrillMarkerScale() {
+        const zoom = map.getZoom();
+        let scale = zoom <= 18 ? 1 : 1 + (zoom - 18) * 0.2;
+
+        document.querySelectorAll('.scale-drill-marker').forEach(el => {
+          el.style.transform = `scale(${scale})`;
+        });
+      }
+
+      updateDrillMarkerScale(); // Initial
+      map.on('zoomend', updateDrillMarkerScale);
+    }
+
+    async function RemoveDrillPointLayerFromMap() {
+      drillPointClusterGroup.clearLayers();
+    }
+
+    async function addWaterQualityPointLayerToMap(WaterQualityFeaturesGeoJson) {
+      // Inject CSS once for scalable marker
+      if (!document.getElementById("scale-water-marker-style")) {
+        const style = document.createElement("style");
+        style.id = "scale-water-marker-style";
+        style.innerHTML = `
+      .scale-water-marker {
+        width: 18px;
+        height: 18px;
+        background-image: url('pic/bhe.svg');
+        background-size: contain;
+        background-repeat: no-repeat;
+        transform-origin: center center;
+      }
+    `;
+        document.head.appendChild(style);
+      }
+
+      // Clear previous markers
+      waterQualityClusterGroup.clearLayers();
+
+      // Add new markers
+      WaterQualityFeaturesGeoJson.features.forEach(feature => {
+        const coords = feature.geometry.coordinates;
+        const messnetz_klartext = feature.properties.messnetz_klartext;
+
+        var iconUrl = null;
+
+        if (messnetz_klartext == "aktives Messnetz Grundwassergüte") {
+          iconUrl = 'pic/Grundwassergüte.svg'
+        } else if (messnetz_klartext == "aktives Messnetz Grundwasserstand") {
+          iconUrl = 'pic/Grundwasserstand.svg'
+        } else if (messnetz_klartext == "aktives Messnetz Grundwasserstand und -güte") {
+          iconUrl = 'pic/GrundwasserstandUndGüte.svg'
+        }
+
+        const marker = L.marker([coords[1], coords[0]], {
+          icon: L.divIcon({
+            className: '',
+            html: `<div class="scale-water-marker" style="background-image: url('${iconUrl}');"></div>`,
+            iconAnchor: [9, 9]
+          })
+        }).addTo(waterQualityClusterGroup);
+
+        //Popup
+        const link = feature.properties.link;
+
+        if (link) {
+          marker.on('click', () => {
+            window.open(link, '_blank');
+          });
+        }
+      });
+
+      if (!map.hasLayer(waterQualityClusterGroup)) {
+        waterQualityClusterGroup.addTo(map);
+      }
+
+      // Zoom scaling logic
+      function updateDrillMarkerScale() {
+        const zoom = map.getZoom();
+        let scale = zoom <= 18 ? 1 : 1 + (zoom - 18) * 0.2;
+
+        document.querySelectorAll('.scale-water-marker').forEach(el => {
+          el.style.transform = `scale(${scale})`;
+        });
+      }
+
+      updateDrillMarkerScale(); // Initial
+      map.on('zoomend', updateDrillMarkerScale);
+    }
+
+    async function RemoveGroundWaterVectorData() {
+      waterQualityClusterGroup.clearLayers();
+    }
+
+    const legend = L.control({ position: 'bottomright' });
+
+    legend.onAdd = function () {
+      const div = L.DomUtil.create('div', 'info legend');
+      div.id = "custom-legend";
+      div.innerHTML = `
+        <h4 style="cursor:pointer; margin: 0 0 6px 0;">Legende</h4>
+        <div id="legend-content">
+          <div id="fixed-legend-items">
+                <div>
+                  <span style="
+                    display: inline-block;
+                    width: 15px;
+                    height: 15px;
+                    background-color: rgba(51, 136, 255, 0.3);
+                    margin-right: 5px;
+                    border: 1.5px solid #3388FF;
+                  "></span>
+                  Flurstück
+                </div>
+                <div>
+                  <span style="
+                    display: inline-block;
+                    width: 15px;
+                    height: 15px;
+                    background-color: rgba(255, 102, 0, 0.3);
+                    margin-right: 5px;
+                    border: 1.5px solid #ff6600;
+                  "></span>
+                  Ausschlussfläche 
+                </div>
+                <div>
+                  <span style="
+                    display: inline-block;
+                    width: 15px;
+                    height: 15px;
+                    background-color: rgba(0, 255, 0, 0.3);
+                    margin-right: 5px;
+                    border: 1.5px solid #00ff00;
+                  "></span>
+                  Nutzbare Fläche 
+                </div>
+                <div class="legend-entry">
+                  <img src="pic/bhe.svg" width="15" style="margin-right: 5px; vertical-align: middle;">
+                  Erdwärmesonde
+                </div>
+          </div>
+          <div id="dynamic-legend-items"></div>
+        </div>
+      `;
+
+      const content = div.querySelector('#legend-content');
+
+      // Attach click event to the entire legend container div
+      L.DomEvent.on(div, 'click', function (e) {
+        // Avoid toggling if clicking inside the content itself (to prevent toggle when interacting with items)
+        if (e.target.closest('#legend-content')) return;
+
+        content.classList.toggle('collapsed');
+      });
+
+      // Prevent map panning/zoom when interacting with legend
+      L.DomEvent.disableClickPropagation(div);
+      L.DomEvent.disableScrollPropagation(div);
+
+      setTimeout(() => updateDynamicLegend(), 0);
+
+      return div;
+    };
+
+    legend.addTo(map);
+
+
+    function updateDynamicLegend() {
+      const dynamicLegend = document.getElementById('dynamic-legend-items');
+      if (!dynamicLegend) return;
+
+      // Clear current content
+      dynamicLegend.innerHTML = '';
+
+      //WaterQulaity
+      if (map.hasLayer(waterQualityClusterGroup)) {
+        dynamicLegend.innerHTML += `
+          <div class="legend-entry">
+            <img src="pic/Grundwassergüte.svg" width="15" style="margin-right: 5px; vertical-align: middle;">
+            Grundwassergüte
+          </div>
+          <div class="legend-entry">
+            <img src="pic/Grundwasserstand.svg" width="15" style="margin-right: 5px; vertical-align: middle;">
+            Grundwasserstand
+          </div>
+          <div class="legend-entry">
+            <img src="pic/GrundwasserstandUndGüte.svg" width="15" style="margin-right: 5px; vertical-align: middle;">
+            Grundwasserstand & -güte
+          </div>
+        `;
+      }
+
+      //Drilling position
+      if (map.hasLayer(drillPointClusterGroup)) {
+        dynamicLegend.innerHTML += `
+        <div class="legend-entry">
+          <img src="pic/drill_100.svg" width="15" style="margin-right: 5px; vertical-align: middle;">
+          Bohrprofil >80 bis ≤100m
+        </div>
+        <div class="legend-entry">
+          <img src="pic/drill_deep.svg" width="15" style="margin-right: 5px; vertical-align: middle;">
+          Bohrprofil >100m
+        </div>
+      `;
+      }
+
+      //Drilling position
+      if (map.hasLayer(treeLayerGroup)) {
+        dynamicLegend.innerHTML += `
+        <div>
+          <span style="
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            background-color: rgba(34, 139, 34, 0.3);
+            margin-right: 5px;
+            border: 1.5px solid #228B22;
+          "></span>
+          Baumkronen
+        </div>
+      `;
+      }
+
+      if (map.hasLayer(restrictionPlaceholderLayerGroup)) {
+        dynamicLegend.innerHTML += `
+        <div>
+          <span style="
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            background-color: rgba(255, 0, 0, 0.2);
+            margin-right: 5px;
+            border: 1.5px dashed #FF0000;;
+          "></span>
+          Wasserschutzgebiet
+        </div>
+      `;
+        dynamicLegend.innerHTML += `
+        <div>
+          <span style="
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            background-color: rgba(160, 149, 0, 0.2);
+            margin-right: 5px;
+            border: 1.5px dashed #A09500;;
+          "></span>
+          Tiefenbegrenzung
+        </div>
+      `;
+        dynamicLegend.innerHTML += `
+        <div>
+          <span style="
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            background-color: rgba(139, 0, 158, 0.2);
+            margin-right: 5px;
+            border: 1.5px dashed #8B009E;;
+          "></span>
+          Artesisch gespannt
+        </div>
+      `;
+      }
+
+      if (map.hasLayer(MinorProtectionPlaceholderLayerGroup)) {
+        dynamicLegend.innerHTML += `
+        <div>
+          <span style="
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            background-color: rgba(127, 51, 0, 0.2);
+            margin-right: 5px;
+            border: 1.5px dashed #7F3300;;
+          "></span>
+          Gartendenkmal
+        </div>
+      `;
+        dynamicLegend.innerHTML += `
+        <div>
+          <span style="
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            background-color: rgba(74, 71, 255, 0.2);
+            margin-right: 5px;
+            border: 1.5px dashed #4A47FF;;
+          "></span>
+          Naturschutzgebiet
+        </div>
+      `;
+        dynamicLegend.innerHTML += `
+        <div>
+          <span style="
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            background-color: rgba(38, 127, 0, 0.2);
+            margin-right: 5px;
+            border: 1.5px dashed #267F00;;
+          "></span>
+          Biotop
+        </div>
+      `;
+      }
+    }
+
+    async function AddProtectionArea() {
+
+      //WaterProc Area
+      const geoJsonLayerWaterProc = L.geoJSON(WaterProc_4326_V2, {
+        renderer: sharedCanvasRenderer,
+        style: function (feature) {
+          return {
+            fillColor: '#FF0000',
+            color: '#FF0000',
+            dashArray: '5, 5',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.2,
+          };
+        },
+      });
+
+      geoJsonLayerWaterProc.eachLayer(layer => {
+        layer._originalStyle = {
+          fillOpacity: layer.options.fillOpacity,
+          opacity: layer.options.opacity,
+        };
+      });
+
+      //Depth Regulation
+      const geoJsonLayerDepth = L.geoJSON(DepthRegulation_4326_V2, {
+        renderer: sharedCanvasRenderer,
+        style: function (feature) {
+          return {
+            fillColor: '#A09500',
+            color: '#A09500',
+            dashArray: '5, 5',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.2,
+          };
+        },
+      });
+
+      geoJsonLayerDepth.eachLayer(layer => {
+        layer._originalStyle = {
+          fillOpacity: layer.options.fillOpacity,
+          opacity: layer.options.opacity,
+        };
+      });
+
+      //Tense
+      const geoJsonLayerTense = L.geoJSON(Tense_4326_V2, {
+        renderer: sharedCanvasRenderer,
+        style: function (feature) {
+          return {
+            fillColor: '#8B009E',
+            color: '#8B009E',
+            dashArray: '5, 5',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.2,
+          };
+        },
+      });
+
+      geoJsonLayerTense.eachLayer(layer => {
+        layer._originalStyle = {
+          fillOpacity: layer.options.fillOpacity,
+          opacity: layer.options.opacity,
+        };
+      });
+
+      // Add to dynamic group
+
+      geoJsonLayerTense.addTo(Res_tenseLayerGroup);
+      Res_tenseLayerGroup.addTo(map);
+
+      geoJsonLayerDepth.addTo(Res_RestrictionLayerGroup);
+      Res_RestrictionLayerGroup.addTo(map);
+
+      geoJsonLayerWaterProc.addTo(Res_WaterProcLayerGroup);
+      Res_WaterProcLayerGroup.addTo(map);
+
+    }
+
+    async function AddFurtherProtectionAreas() {
+
+      //WaterProc Area
+      const geoJsonLayerNatureMemorial = L.geoJSON(natureMemorial_4326, {
+        renderer: sharedCanvasRenderer,
+        style: function (feature) {
+          return {
+            fillColor: '#7F3300',
+            color: '#7F3300',
+            dashArray: '5, 5',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.2,
+          };
+        },
+      });
+
+      geoJsonLayerNatureMemorial.eachLayer(layer => {
+        layer._originalStyle = {
+          fillOpacity: layer.options.fillOpacity,
+          opacity: layer.options.opacity,
+        };
+      });
+
+      //Depth Regulation
+      const geoJsonLayerNatureProc = L.geoJSON(naturProctecArea_4326, {
+        renderer: sharedCanvasRenderer,
+        style: function (feature) {
+          return {
+            fillColor: '#4A47FF',
+            color: '#4A47FF',
+            dashArray: '5, 5',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.2,
+          };
+        },
+      });
+
+      geoJsonLayerNatureProc.eachLayer(layer => {
+        layer._originalStyle = {
+          fillOpacity: layer.options.fillOpacity,
+          opacity: layer.options.opacity,
+        };
+      });
+
+      //Tense
+      const geoJsonLayerBiotop = L.geoJSON(biotop_4326, {
+        renderer: sharedCanvasRenderer,
+        style: function (feature) {
+          return {
+            fillColor: '#267F00',
+            color: '#267F00',
+            dashArray: '5, 5',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.2,
+          };
+        },
+      });
+
+      geoJsonLayerBiotop.eachLayer(layer => {
+        layer._originalStyle = {
+          fillOpacity: layer.options.fillOpacity,
+          opacity: layer.options.opacity,
+        };
+      });
+
+      // Add to dynamic group
+
+      geoJsonLayerNatureMemorial.addTo(Res_natureMemorialLayerGroup);
+      Res_natureMemorialLayerGroup.addTo(map);
+
+      geoJsonLayerNatureProc.addTo(Res_naturProctecAreaLayerGroup);
+      Res_naturProctecAreaLayerGroup.addTo(map);
+
+      geoJsonLayerBiotop.addTo(Res_biotopLayerGroup);
+      Res_biotopLayerGroup.addTo(map);
+
+    }
+
+    var userId;
+
+    document.addEventListener('DOMContentLoaded', async function () {
+      const fingerprinter = new UserFingerprint();
+      userId = await fingerprinter.getUserId();
+
+      //console.log('User registered with API: ' + userId);
+      await InitalConnection(userId);
+
+      window.currentUserId = userId;
+    });
+
+    window.addEventListener('beforeunload', function (event) {
+      if (window.currentUserId) {
+        EndConnection(window.currentUserId);
+      }
+    });
+
+
+    const btnMinus = document.getElementById("btnMinusArea");
+
+    btnMinus.addEventListener("click", () => {
+      // Add the animation class
+      btnMinus.classList.add("click-animate");
+
+      // Remove it after animation ends to allow re-trigger
+      setTimeout(() => {
+        btnMinus.classList.remove("click-animate");
+      }, 300); // same as animation duration
+    });
+
+    const btnNewArea = document.getElementById("btnNewArea");
+
+    btnNewArea.addEventListener("click", () => {
+      // Add the animation class
+      btnNewArea.classList.add("click-animate");
+
+      // Remove it after animation ends to allow re-trigger
+      setTimeout(() => {
+        btnNewArea.classList.remove("click-animate");
+      }, 300); // same as animation duration
+    });
+
+    const btnAddSuperiorArea = document.getElementById("btnAddSuperiorArea");
+
+    btnAddSuperiorArea.addEventListener("click", () => {
+      // Add the animation class
+      btnAddSuperiorArea.classList.add("click-animate");
+
+      // Remove it after animation ends to allow re-trigger
+      setTimeout(() => {
+        btnAddSuperiorArea.classList.remove("click-animate");
+      }, 300); // same as animation duration
+    });
+
+
+
+    function toggleDropdown() {
+      const dropdownContent = document.querySelector('.dropdown-content');
+      dropdownContent.style.display =
+        dropdownContent.style.display === 'block' ? 'none' : 'block';
+    }
+
+    // Optional: Close the dropdown if the user clicks outside of it
+    document.addEventListener('click', function (event) {
+      const dropdown = document.querySelector('.dropdown');
+      const dropdownContent = document.querySelector('.dropdown-content');
+      if (!dropdown.contains(event.target)) {
+        dropdownContent.style.display = 'none';
+      }
+    });
+
+    function parseExcelData() {
+      // Get the pasted Excel string
+      const excelData = document.getElementById("pasteExcel").value;
+
+      // Split the data by tab (\t)
+      const dataArray = excelData.split("\t");
+
+      // Check if the data has the correct number of fields
+      if (dataArray.length >= 7) {
+        // Helper function to handle German numeric formatting
+        const parseGermanNumber = (value) => {
+          return value.replace(/\./g, "").replace(",", ".");
+        };
+
+        // Map the data array to the form fields
+        document.getElementById("Form_lfdNr").value = dataArray[0]; // lfd.Nr.
+        document.getElementById("Form_wirtschaftseinheit").value = dataArray[1]; // Wirtschaftseinheit
+        document.getElementById("Form_bezirk").value = dataArray[2]; // Bezirk
+        document.getElementById("Form_postleitzahl").value = dataArray[3]; // PLZ
+        document.getElementById("Form_grundstuecksflaeche").value = parseGermanNumber(dataArray[4]); // Grundstücksfläche
+        document.getElementById("Form_waermeverbrauch").value = parseGermanNumber(dataArray[5]); // Wärmeverbrauch
+        document.getElementById("Form_energietraeger").value = dataArray[6]; // Energieträger
+        document.getElementById("Form_flurstuecksnummer").value = dataArray[7]; // Energieträger
+      } else {
+        alert("Invalid data format. Please ensure all fields are present in the pasted string.");
+      }
+    }
+
+    function updateModalHeightToMap() {
+      const map = document.getElementById('map');
+      const modalDialog = document.querySelector('#myModal .modal-dialog');
+      if (map && modalDialog) {
+        const mapHeight = map.offsetHeight - 44;
+        modalDialog.style.maxHeight = mapHeight + 'px';
+      }
+    }
+
+    // Run once at start
+    updateModalHeightToMap();
+
+    // Run on resize
+    window.addEventListener('resize', updateModalHeightToMap);
+
+    // Optionally, call this again when you open the modal
+    // For example, if using Bootstrap's modal events:
+    $('#myModal').on('shown.bs.modal', updateModalHeightToMap)
+
+    map.zoomControl.remove();
+    addZoomControl();
+
+
+  </script>
+
+</body>

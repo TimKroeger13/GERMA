@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Edge against Live Server",
+      "type": "msedge",
+      "request": "launch",
+      "url": "http://127.0.0.1:5500", // Make sure this matches your Live Server address
+      "webRoot": "${workspaceFolder}",
+      "sourceMaps": true,
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ]
+}

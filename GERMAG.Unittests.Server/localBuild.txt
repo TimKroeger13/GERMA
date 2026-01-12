@@ -1,0 +1,73 @@
+//Build image
+
+docker build -f Local_backend.Dockerfile -t germa-test .
+
+//Check all images
+
+docker images
+
+//Run the containerdocker 
+
+docker run -p 8080:80 -p 8443:443 --name germa-test-container \
+  -e DATABASE_CONNECTION="Host=localhost:5433;Database=germa;Username=germa;Password=germa" \
+  germa-test
+
+docker run -p 8080:80 -p 8443:443 --name germa-test-container \
+  -e DATABASE_CONNECTION="Host=localhost:5433;Database=germa;Username=germa;Password=germa" \
+  -e ASPNETCORE_ENVIRONMENT=Development \
+  -e ASPNETCORE_Kestrel__Certificates__Default__Path=/root/.aspnet/https/developerCertificate.pfx \
+  -e ASPNETCORE_Kestrel__Certificates__Default__Password=gsp \
+  germa-test /bin/bash
+
+docker run -p 8080:80 -p 8443:443 --name germa-test-container \
+  -e DATABASE_CONNECTION="Host=localhost:5433;Database=germa;Username=germa;Password=germa" \
+  -e ASPNETCORE_ENVIRONMENT=Development \
+  -e ASPNETCORE_Kestrel__Certificates__Default__Path=/root/.aspnet/https/developerCertificate.pfx \
+  -e ASPNETCORE_Kestrel__Certificates__Default__Password=gsp \
+  germa-test
+
+
+[//Remove container]
+ docker rm germa-test-container
+
+[/7Remove Images]
+ docker rm germa-test-container
+
+[//Create local developer certificate]
+
+mkdir certs
+dotnet dev-certs https -ep certs/developerCertificate.pfx -p gsp
+
+dotnet dev-certs https
+dotnet dev-certs https --trust
+
+
+//Go inside the container
+docker run --rm -it --entrypoint /bin/bash germa-test
+
+
+
+
+
+
+
+
+
+
+###################################
+
+
+docker build -f backend.Dockerfile -t germa-test .
+
+
+docker run \
+  --name germa-test \
+  -e ASPNETCORE_ENVIRONMENT=Development \
+  -e DATABASE_CONNECTION="Host=host.docker.internal:5433;Database=germa;Username=germa;Password=germa" \
+  -p 8080:8080 \
+  germa-test
+
+
+
+
+

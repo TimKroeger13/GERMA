@@ -1,0 +1,755 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+#map {
+  flex: 1;
+  width: 100vw;
+}
+
+.leaflet-map-pane {
+  will-change: transform;
+}
+
+p {
+  margin: 0;
+}
+
+.geothermal-report p {
+  margin: 0 !important;
+}
+
+.geothermal-report {
+  max-width: 100%;
+  width: 800px; /* Adjust as needed */
+  margin: 0 auto; /* Center the content */
+}
+
+#myModal {
+  overflow-y: hidden;
+}
+
+.modal-header {
+  cursor: move;
+}
+
+.custom-modal-title {
+  margin-right: auto;
+}
+
+.leaflet-control-scale-line {
+  height: 22px;         /* Makes the bar taller */
+  font-size: 16px;      /* Makes the text bigger */
+  border-color: black;
+}
+
+
+#myModal .modal-dialog {
+  left: 50px;
+  margin-left: 0;
+  width: min(800px, 33vw); 
+  margin: 0;
+  padding: 0;
+  pointer-events: auto; 
+  max-height: calc(80vh - 22px);
+  overflow-y: auto !important;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.modal {
+  pointer-events: none;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 1;
+  }
+}
+
+.modal.show {
+  pointer-events: auto; 
+}
+
+.modal-backdrop {
+  display: auto !important; 
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100vw !important;
+  height: 100vh;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+#address-bar {
+  display: flex;
+  height: 5vh; 
+  background-color: #2D2D2D;
+  padding-left: 1vw;
+  padding-right: 1vw;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+  margin: 0;
+  box-sizing: border-box;
+  pointer-events: auto;
+}
+
+.modal-footer {
+  display: flex-end; /*flex*/
+  justify-content: flex-start;
+}
+
+.modal-footer .print-btn:first-child {
+  margin-right: auto;
+}
+
+#myModal .modal-content {
+  background-color: rgba(255, 255, 255,1); /* rgba(255, 255, 255,1); */
+  border-radius: 20px;
+  box-shadow: none;
+  /*backdrop-filter: blur(2px);*/
+  /*-webkit-backdrop-filter: blur(2px);*/
+}
+
+#address-input {
+  flex: 1;
+  font-size: 2vh;
+  height: 100%;
+  margin-right: 1vw;
+  padding: 0;
+  pointer-events: auto;
+}
+
+#address-bar button {
+  height: 100%;
+  font-size: 2vh;
+  width: 10vw;
+  margin: 0;
+  padding: 0;
+  vertical-align: baseline;
+  pointer-events: auto;
+}
+
+#branding {
+  display: flex; /* New container for "GERMAG" */
+  align-items: center; /* Center the content vertically */
+  margin-right: 1vw;
+  pointer-events: auto;
+}
+
+#branding-text {
+  font-size: 2.5vh;
+  color: white;
+  pointer-events: auto;
+}
+
+#functions {
+  display: flex;
+  flex-wrap: wrap; 
+  justify-content: space-between;
+  align-items: center;
+  background-color: #2D2D2D;
+  padding-left: 1vw;
+  padding-right: 1vw;
+  padding-top: 0vh;
+  padding-bottom: 0.5vh;
+  margin: 0;
+  box-sizing: border-box;
+  pointer-events: auto;
+}
+
+.functions-inner {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  width: 100%;
+  row-gap: 1rem;
+}
+
+.function-left,
+.function-right {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.Iconbutton {
+  height: 28px; /* fixed height for stability */
+  width: 28px;
+  border: none;
+  color: black; /* White text */
+  margin: 0;
+  padding: 0;
+  font-size: 16px; 
+  cursor: pointer;
+  vertical-align: baseline;
+  pointer-events: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 5px;
+}
+
+.Iconbutton img {
+  width: 100%; /* Adjust the width according to your icon size */
+  height: 100%; /* Adjust the height according to your icon size */
+}
+
+.Iconbutton:hover{
+  background-color: #D8D8D8;
+}
+
+.Iconbutton:disabled {
+  opacity: 0.4;           /* Make it look faded */
+  cursor: not-allowed;    /* Show a “not allowed” cursor */
+  background-color: #f0f0f0; /* Optional light gray background */
+  pointer-events: none;   /* Prevent accidental clicks */
+}
+
+.Iconbutton:disabled img {
+  filter: grayscale(100%); /* Make the icon gray */
+}
+
+@keyframes clickEffect {
+  0% {
+    transform: scale(1.3) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.3) rotate(180deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.3) rotate(360deg);
+    opacity: 1;
+  }
+}
+
+.Iconbutton.click-animate {
+  animation: clickEffect 0.3s ease-in-out;
+}
+
+.NumberInputField {
+  height: 28px;
+  width: 70px; /* Adjust width as needed */
+  padding: 4px 10px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  background-color: #f0f0f0;
+  color: #333;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+  transition: box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+.NumberInputField:focus {
+  outline: none;
+  background-color: #e0e0e0;
+  box-shadow: 0 0 0 2px #4a90e2;
+  transform: scale(1.02);
+}
+
+.InputGroup {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  margin-right: 5px;
+}
+
+.InputLabel {
+  color: white;
+  font-size: 16px;
+  margin-right: 5px;
+  margin-left: 5px;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  align-items: center;
+  background-color: transparent;
+}
+
+.VerticalDivider {
+  width: 1px;
+  height: 28px; /* match button height */
+  background-color: #888;
+  margin: 0 10px;
+  opacity: 0.5;
+}
+
+
+#numInput, #FlurInput  {
+  pointer-events: auto; /* Ensure input gets pointer events */
+}
+
+.InformationButton {
+  height: 28px;
+  border: none;
+  background-color: #434343; /* Slightly lighter than banner */
+  color: #FFFFFF; /* Crisp white text */
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.InformationButton:hover {
+  background-color: #505050;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.InformationButton:active {
+  transform: translateY(0px) scale(0.98);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.InformationButton img {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  filter: brightness(0) invert(1); /* Makes icons white-like if they’re black */
+}
+
+.InformationButton:hover img {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
+
+.information-container {
+  display: flex;
+  flex-wrap: wrap;  
+  justify-content: center;
+  align-items: center;
+  margin-left: 0px;
+  flex: 0 1 auto;
+  min-width: 300px;
+  
+}
+
+.information-container label {
+  justify-content: center;
+  align-items: center;
+  color: white; /* Set text color to white */
+  margin-left: 10px; /* Space between checkbox and label */
+  font-size: 15px; /* Increase font size */
+}
+
+
+.left-section {
+  justify-content: flex-start;
+}
+
+.right-section {
+  justify-content: flex-end;
+}
+
+.left-section,
+.right-section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: 8px;
+  margin-top: 0; /* default */
+}
+
+
+
+.checkbox-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+}
+
+/* Increase the size of the checkbox */
+.checkbox-container input[type="checkbox"] {
+  width: 20px; /* Increase width */
+  height: 20px; /* Increase height */
+  cursor: pointer; /* Change cursor to pointer */
+}
+
+/* Style the label */
+.checkbox-container label {
+  justify-content: center;
+  align-items: center;
+  color: white; /* Set text color to white */
+  margin-left: 10px; /* Space between checkbox and label */
+  font-size: 15px; /* Increase font size */
+}
+
+.BoundaryLabel {
+  margin-right: 20px;
+}
+
+
+.full-width-btn {
+  width: 100%; /* Makes the button take the full width of the modal */
+  height: 50px; /* Set your desired height (adjust as needed) */
+  font-weight: bold; 
+  display: inline-block; /* Ensure proper display for the button */
+  border: none; /* Remove border (optional) */
+  border-radius: 5px; /* Add rounded corners (optional) */
+  cursor: pointer; /* Show pointer cursor on hover */
+  text-align: center; /* Ensure text is centered */
+}
+
+
+
+
+.ToggleSwitch {
+  position: relative;
+  display: inline-block;
+  width: 54px;
+  height: 28px;
+  margin-left: 10px;
+}
+
+.ToggleSwitch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.Slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 28px;
+}
+
+.Slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+.ToggleSwitch input:checked + .Slider {
+  background-color: #128fc0;
+}
+
+.ToggleSwitch input:checked + .Slider:before {
+  transform: translateX(26px);
+}
+
+
+#loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.8); /* semi-transparent white */
+  z-index: 9999;
+  display: none; /* hidden by default */
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-family: Arial, sans-serif;
+  font-size: 18px;
+  color: #333;
+}
+
+.spinner {
+  border: 6px solid #eee;
+  border-top: 6px solid #007bff;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#progress-container {
+  width: 300px;
+  height: 24px;
+  background: #eee;
+  border-radius: 12px;
+  margin-top: 1rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+}
+
+#progress-bar {
+  background: linear-gradient(90deg, #007bff, #3f8efc);
+  height: 100%;
+  width: 0%;
+  border-radius: 12px 0 0 12px;
+  transition: width 0.3s;
+}
+
+#progress-text {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 0;
+  height: 100%;
+  text-align: center;
+  line-height: 24px;
+  font-size: 16px;
+  color: #333;
+  font-weight: bold;
+  pointer-events: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.info.legend {
+  background: rgba(255, 255, 255, 0.9);  /* semi-transparent white */
+  padding: 10px 16px;                    /* balanced vertical/horizontal padding */
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+  font-size: 14px;
+  color: #333;
+  max-width: 250px;
+  pointer-events: auto !important;
+}
+
+.info.legend h4 {
+  margin: 0 0 8px 0;     /* no space above, a bit below */
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.info.legend .legend-item {
+  display: flex;
+  align-items: center;
+}
+
+.info.legend .legend-symbol {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  vertical-align: middle;
+  margin-right: 6px;
+  border: 1px solid #226699;
+  background-color: rgba(51, 153, 204, 0.5);
+}
+
+#fixed-legend-items,
+#dynamic-legend-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px; /* or 10px or whatever you prefer */
+  margin: 0;
+  padding: 0;
+  margin-top: 4px;
+}
+
+#custom-legend {
+  pointer-events: auto !important;
+  margin-bottom: 15px;  /* adds space below the legend (lifting it up) */
+}
+
+.leaflet-control .info.legend {
+  pointer-events: auto !important;
+}
+
+#legend-content {
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  overflow: hidden;
+  max-height: 1000px; /* big enough to fit content */
+  opacity: 1;
+}
+
+#legend-content.collapsed {
+  max-height: 0;
+  opacity: 0;
+}
+
+
+
+.leaflet-control-layers {
+  background: rgba(255, 255, 255, 0.9); /* white with 80% opacity */
+  box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+  border-radius: 4px;
+  font-size: 9px; /* bigger text */
+  padding: 5px;   /* more padding */
+}
+
+.leaflet-control-layers-list label {
+  padding: 2px 8px; /* bigger click area around checkboxes */
+}
+
+.leaflet-control-layers-base label,
+.leaflet-control-layers-overlays label {
+  white-space: normal; /* wrap long text */
+}
+
+/*Input Field*/
+
+.input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+/* Label: h4 style match */
+.input-label {
+    font-weight: bold;
+    font-size: 1.8rem; /* Matches h4 by default in most browsers */
+    margin: 0;
+}
+
+/* Input field: clean, modern, dynamic width */
+.input-field {
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1.8rem; /* Same as h4 */
+    transition: width 0.2s;
+    width: auto;
+    min-width: 80px; /* Prevents it from collapsing too small */
+}
+
+/* Unit text: h4 size and alignment */
+.input-unit {
+    font-size: 1.8rem; /* Match h4 */
+}
+
+.selection-row {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+/* Dropdown styling: clean, modern */
+.selection-dropdown {
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1.8rem;
+    margin-left: 1rem;
+    cursor: pointer;
+}
+
+.dropdown.disabled .dropdown-content {
+  display: none !important;
+  pointer-events: none;
+}
+.dropdown.disabled .dropdown-toggle {
+  opacity: 0.5;
+}
+
+
+
+
+
+.dropdown {
+ position: relative;
+ display: inline-block;
+ margin:06px; /* Same margin as .InformationButton */
+ padding:0; /* Ensure no extra padding */
+}
+
+/* Dropdown button (inherits .InformationButton) */
+.dropdown-toggle {
+ width:100%;
+ height:28px; /* Match height of .InformationButton */
+ padding:8px16px; /* Same padding as .InformationButton */
+ font-size:18px; /* Match font size */
+ font-weight:500; /* Match font weight */
+ border-radius:8px;
+ box-shadow:02px4px rgba(0,0,0,0.25);
+ transition: all0.25s ease;
+ background-color: #434343;
+ color: #FFFFFF;
+ border: none;
+ cursor: pointer;
+}
+
+/* Dropdown content (hidden by default) */
+.dropdown-content {
+ display: none;
+ position: absolute;
+ background-color: #434343;
+ min-width:160px;
+ box-shadow:08px16px rgba(0,0,0,0.4);
+ z-index:1000; /* Ensure dropdown appears above Leaflet map */
+ border-radius:8px;
+ overflow: hidden;
+ margin:0; /* Match margins */
+ padding:0; /* Ensure no extra padding */
+}
+
+/* Dropdown content buttons */
+.dropdown-content button {
+ width:100%;
+ border: none;
+ background-color: #434343;
+ color: #FFFFFF;
+ font-size:16px;
+ padding:12px16px; /* Add padding for better spacing inside the dropdown */
+ text-align: left;
+ cursor: pointer;
+ transition: background-color0.25s ease;
+}
+
+/* Dropdown button hover effects */
+.dropdown-content button:hover {
+ background-color: #505050;
+}
+
+/* Show dropdown when parent is hovered */
+.dropdown:hover .dropdown-content {
+ display: block;
+}

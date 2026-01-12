@@ -1,0 +1,23 @@
+﻿@page "/research"
+@using GERMAG.Client.Services
+
+<PageTitle>Research buttons</PageTitle>
+
+<h1>Buttons</h1>
+
+<p role="status">Calcualte data: @IsUpdateing</p>
+
+<button class="btn btn-primary" @onclick="FetchAllDataRequest">Calcualting data</button>
+
+@code {
+    [Inject] ICalcualteResearchParameterService researchController { get; set; } = default!;
+
+    private string @IsUpdateing = "Not checked";
+
+    private async Task FetchAllDataRequest()
+    {
+        Console.WriteLine("Function clicked");
+
+        IsUpdateing = await researchController.calcualteResearch();
+    }
+}

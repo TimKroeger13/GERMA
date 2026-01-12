@@ -1,0 +1,1 @@
+ALTER TYPE geometry_type ADD VALUE 'multipolygon';

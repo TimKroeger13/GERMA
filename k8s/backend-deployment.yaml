@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: germag-backend-stage
+  namespace: germa
+  labels:
+    app: germag-backend-stage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: germag-backend-stage
+  template:
+    metadata:
+      labels:
+        app: germag-backend-stage
+    spec:
+      volumes:
+        - name: secret-store
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: germa-keyvault
+        - name: grpc-tls-volume
+          secret:
+            secretName: germa-tls-stage
+      containers:
+      - name: germag-backend-stage
+        image: gsdatalakecr.azurecr.io/gs-datalake/germa-backend-stage:latest
+        ports:
+        - containerPort: 443
+        volumeMounts:
+          - name:  secret-store
+            mountPath:  "mnt/secret-store"
+            readOnly: true
+          - name: grpc-tls-volume  # The name of the volume we are mounting
+            mountPath: /etc/tls      # The path inside the container where the certificate files will be available
+            readOnly: true           # Mark the volume as read-only
+        env:
+            - name: GERMA_DATABASE_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: germa-secrets
+                  key: GF-PROD-DB-HOST
+                  optional: false
+            - name: GERMA_DATABASE_NAME
+              value: "germa_stage"
+            - name: GERMA_DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: germa-secrets
+                  key: GERMA-DB-USER
+                  optional: false
+            - name: GERMA_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: germa-secrets
+                  key: GERMA-DB-PASSWORD
+                  optional: false
+            - name: DATABASE_CONNECTION
+              valueFrom:
+                secretKeyRef:
+                  name: germa-secrets
+                  key: GERMA-DB-CONNECTION-STRING-STAGE
+                  optional: false

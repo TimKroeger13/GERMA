@@ -1,0 +1,59 @@
+﻿@page "/fetchdata"
+@using GERMAG.Client.Services
+@using GERMAG.DataModel
+@using GERMAG.Shared
+@using GERMAG.Client.Core
+@using GERMAG.Shared.Core
+@inject HttpClient Http
+
+<h1>GERMAG database</h1>
+
+<p>Fetched data from geothermal_parameter Table</p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Type of Data</th>
+                <th>Area</th>
+                <th>Range</th>
+                <th>Geometry Type</th>
+                <th>Service</th>
+                <th>EPSG</th>
+                <th>Last Ping</th>
+                <th>Last Update</th>
+                <th>Getrequest</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var model in _geoModels)
+            {
+                <tr>
+                    <td>@model.Id</td>
+                    <td>@model.Type</td>
+                    <td>@model.Area</td>
+                    <td>@model.Range</td>
+                    <td>@model.Geometry_Type</td>
+                    <td>@model.Service</td>
+                    <td>@model.Srid</td>
+                    <td>@model.LastPing?.ToShortDateString()</td>
+                    <td>@model.LastUpdate?.ToShortDateString()</td>
+                    <td>@model.Getrequest</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+@code {
+    [Inject] IRestInteropFactory RestInteropFactory { get; set; } = default!;
+    [Inject] IGeothermalParameterService ParameterService { get; set; } = default!;
+    private IRestInterop _restInterop { get; set; } = default!;
+    private IEnumerable<GeothermalParameterModel> _geoModels = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        _restInterop = RestInteropFactory.CreateRestInterop("api/WeatherForecast");
+        _geoModels = await ParameterService.GetParameters() ?? [];
+    }
+}
+

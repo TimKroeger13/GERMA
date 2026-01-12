@@ -1,0 +1,13 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created using Krita: https://krita.org -->
+<svg xmlns="http://www.w3.org/2000/svg" 
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:krita="http://krita.org/namespaces/svg/krita"
+    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+    width="120pt"
+    height="120pt"
+    viewBox="0 0 120 120">
+<defs/>
+<path id="shape0" transform="translate(53.4767459032342, 13.2707946865356)" sodipodi:type="arc" sodipodi:rx="27.6706006192099" sodipodi:ry="27.6706006192099" sodipodi:cx="27.6624782732697" sodipodi:cy="27.670646186951" sodipodi:start="3.16582285756637" sodipodi:end="1.56050388141109" sodipodi:open="true" d="M27.9473 55.3398C43.1043 55.1838 55.3146 42.8621 55.3331 27.7043C55.3515 12.5464 43.1711 0.195128 28.0145 0.002285C12.8579 -0.190558 0.367242 11.8468 0 27.0002" fill="none" stroke="#000000" stroke-width="9.6" stroke-linecap="square" stroke-linejoin="bevel"/><path id="shape1" transform="translate(16.5598917402194, 46.3499997568851)" fill="none" stroke="#000000" stroke-width="9.6" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2" d="M36.9001 0L0 7.10543e-15" sodipodi:nodetypes="cc"/><path id="shape2" transform="translate(16.5599999131395, 46.439999756413)" fill="none" stroke="#000000" stroke-width="9.6" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2" d="M0 0L3.55271e-15 57.0601" sodipodi:nodetypes="cc"/><path id="shape3" transform="translate(16.6499999126675, 103.499999457122)" fill="none" stroke="#000000" stroke-width="9.6" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2" d="M0 1.42109e-14L57.517 0" sodipodi:nodetypes="cc"/><path id="shape4" transform="translate(74.1599996110161, 68.6699955467624)" fill="none" stroke="#000000" stroke-width="9.6" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2" d="M0 33.93L0 0" sodipodi:nodetypes="cc"/>
+</svg>

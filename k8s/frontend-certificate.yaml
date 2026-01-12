@@ -1,0 +1,21 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: germa-tls-stage
+  namespace: germa
+  labels:
+    app: static-site-stage
+spec:
+  secretName: germa-tls-stage
+  privateKey:
+    rotationPolicy: Always
+  commonName: "germa-tool.gs-local.germa.de"
+  dnsNames:
+    - "germa-tool.gs-local.germa.de"
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+  issuerRef:
+    name: letsencrypt-private
+    kind: ClusterIssuer

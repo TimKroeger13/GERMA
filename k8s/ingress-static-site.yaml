@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: germa-ingress-static-site-stage
+  namespace: germa
+  annotations:
+    # nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/secure-backends: "true"
+    # type of authentication
+    nginx.ingress.kubernetes.io/auth-type: basic
+    # name of the secret that contains the user/password definitions
+    nginx.ingress.kubernetes.io/auth-secret: basic-auth
+    # message to display with an appropriate context why the authentication is required
+    nginx.ingress.kubernetes.io/auth-realm: 'Nutzer und Passwort erforderlich.'
+spec:
+  ingressClassName: ingress-internal
+  tls:
+  - hosts:
+    - "germa-tool.gs-local.germa.de"
+    secretName: germa-tls-stage
+  rules:
+  - host: germa-tool.gs-local.germa.de
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: static-site-stage
+            port:
+              number: 80

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<svg width="29" height="28" xmlns="http://www.w3.org/2000/svg" version="1.1">
+  <title>plus [#1469]</title>
+  <desc>Plus symbol, every arm in a different color (rainbow), original coordinates preserved.</desc>
+  <g class="layer">
+    <title>Layer 1</title>
+    <g fill="none" fill-rule="evenodd" id="Page-1">
+      <g id="Dribbble-Light-Preview" transform="translate(-95.000000, -436.000000)">
+        <g id="icons" transform="translate(56.000000, 160.000000)">
+          <!-- Center vertical arm (Red) -->
+          <path d="m57.7,289l-3.15,0l0,-3l-2.1,0l0,3l-3.15,0l0,2l3.15,0l0,3l2.1,0l0,-3l3.15,0l0,-2z" fill="#00A502"/>
+          <!-- Top arm (Orange) -->
+          <path d="m55.6,280l0,2l6.3,0l0,6l2.1,0l0,-8l-8.4,0z" fill="#00A502"/>
+          <!-- Bottom arm (Yellow) -->
+          <path d="m61.9,298l-6.3,0l0,2l8.4,0l0,-8l-2.1,0l0,6z" fill="#00A502"/>
+          <!-- Left arm (Green) -->
+          <path d="m45.1,292l-2.1,0l0,8l8.4,0l0,-2l-6.3,0l0,-6z" fill="#00A502"/>
+          <!-- Right arm (Blue) -->
+          <path d="m45.1,288l-2.1,0l0,-8l8.4,0l0,2l-6.3,0l0,6z" fill="#00A502"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

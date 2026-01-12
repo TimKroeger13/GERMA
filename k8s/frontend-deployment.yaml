@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: static-site-stage
+  namespace: germa
+  labels:
+    app: static-site-stage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: static-site-stage
+  template:
+    metadata:
+      labels:
+        app: static-site-stage
+    spec:
+      containers:
+      - name: static-site-stage
+        image: gsdatalakecr.azurecr.io/gs-datalake/germa-frontend-stage:latest
+        ports:
+        - containerPort: 80
+        env:
+            - name: GERMA_DATABASE_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: germa-secrets
+                  key: GF-PROD-DB-HOST
+                  optional: false
+            - name: GERMA_DATABASE_NAME
+              value: "germa_stage"
+            - name: GERMA_DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: germa-secrets
+                  key: GERMA-DB-USER
+                  optional: false
+            - name: GERMA_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: germa-secrets
+                  key: GERMA-DB-PASSWORD
+                  optional: false
