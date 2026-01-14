@@ -1,14 +1,14 @@
 //GlobalURLPreLink
-const GlobalURLPreLink = "https://localhost:9999/api/report/";
-const GlobalURLVectorDataSteam = "https://localhost:9999/api/Geodatastream/";
-const GlobalURLConnection = "https://localhost:9999/api/Connection/";
+const GlobalURLPreLink = "https://tkroeger.com:8443/api/report/";
+const GlobalURLVectorDataSteam = "https://tkroeger.com:8443/api/Geodatastream/";
+const GlobalURLConnection = "https://tkroeger.com:8443/api/Connection/";
 //const GlobalURLPreLink = "https://localhost:9999/api/report/";
 //const GlobalURLVectorDataSteam = "https://localhost:9999/api/Geodatastream/";
 //const GlobalURLConnection = "https://localhost:9999/api/Connection/";
 
-//const GlobalURLPreLink = "https://germa-tool.gs-local.germa.de/api/report/";
-//const GlobalURLVectorDataSteam = "https://germa-tool.gs-local.germa.de/api/Geodatastream/";
-//const GlobalURLConnection = "https://germa-tool.gs-local.germa.de/api/Connection/";
+//const GlobalURLPreLink = "https://tkroeger.com:8443/api/report/";
+//const GlobalURLVectorDataSteam = "https://tkroeger.com:8443/api/Geodatastream/";
+//const GlobalURLConnection = "https://tkroeger.com:8443/api/Connection/";
 
 async function GetRequest(XcorList, YcorList) {
     var Srid = 4326; //test
@@ -237,9 +237,6 @@ async function GetRequestEditGeometry(NewAreaGeometry,MinusAreaGeometryList,AllS
     };
 
     const url = GlobalURLPreLink + "geojsonreport";
-
-    ////const url = `https://localhost:9999/api/report/geojsonreport`;
-    ////const url = `https://germa.gs-local.germa.de/api/report/geojsonreport`;
 
     try {
         const response = await fetch(url, {
