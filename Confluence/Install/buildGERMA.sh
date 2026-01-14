@@ -7,7 +7,7 @@ sudo docker run \
   --name germa-live \
   --env DATABASE_CONNECTION="Host=172.19.0.50:5432;Database=germa;Username=postgres;Password=$dbPassword" \
   --restart always \
-  -v /home/certs:/root/certs:ro \
+  -v /etc/letsencrypt:/etc/letsencrypt:ro \
   --ip 172.19.0.51 \
   --network db-network \
 germa:live
