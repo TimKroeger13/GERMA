@@ -1,3 +1,3 @@
 #!/bin/bash
 cd /app/Server/dist || exit
-dotnet GERMA.Server.dll
+dotnet GERMAG.Server.dll
