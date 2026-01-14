@@ -1,5 +1,5 @@
 #!/bin/bash
-sudo docker build -f Dockerfile --no-cache -t germag:live .
+sudo docker build -f DOCKERFILE --no-cache -t germag:live .
 read -r -p "Database Password: " dbPassword 
 sudo docker rm -f germag-live
 sudo docker run \
