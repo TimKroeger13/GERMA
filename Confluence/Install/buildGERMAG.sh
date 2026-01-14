@@ -10,4 +10,4 @@ sudo docker run \
   -v /home/certs:/root/certs:ro \
   --ip 172.19.0.51 \
   --network db-network \
-germag:live
+germa:live
