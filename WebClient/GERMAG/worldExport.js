@@ -82,8 +82,8 @@ async function buildWord() {
         ? new ImageRun({
             data: imageBuffer,
             transformation: {
-                width: 150,
-                height: 150,
+                width: 100,
+                height: 100,
             },
         })
         : new TextRun("Image failed to load.");
@@ -137,11 +137,6 @@ async function buildWord() {
             new TextRun({ break: 1 }), // line break
             new TextRun({
                 text: "Die Nutzung und/oder Weitergabe der Angaben und Daten erfolgt auf eigenes Risiko.",
-                color: "FF0000", // Red color (hex code)
-            }),
-            new TextRun({ break: 1 }), // line break
-            new TextRun({
-                text: "Grundsätzlich ist für geothermische Kundenanfragen stets die Fachplanung O-GT-T zuständig und durch den Vertrieb einzubeziehen.",
                 color: "FF0000", // Red color (hex code)
             }),
         ],
@@ -348,39 +343,6 @@ async function buildWord() {
 
 
 
-
-    const SummaryTitel = new Paragraph({
-        children: [
-            new TextRun({
-                text: "Zusammenfassung",
-                bold: true,
-                size: 28,
-            }),
-        ],
-        spacing: {
-            after: 300,
-        },
-        pageBreakBefore: true,
-    });
-    children.push(SummaryTitel);
-
-
-    const Summary = new Paragraph({
-        children: [
-            new TextRun({
-                text: "Für das Vorhaben DEKAB-Fahrplan des Projektstandortes Granitzstr. 42, 13189 Berlin wurde die Machbarkeitsstudie zur geothermischen Nutzung des oberflächennahen Untergrunds durchgeführt. In dieser Untersuchung wurden sowohl Brunnendubletten mit Grundwasser-Wärmepumpe als offenes Geothermiesystem als auch Erdwärmesonden mit Sole-Wasser-Wärmepumpe als geschlossenes Geothermiesystem betrachtet.",
-                size: 28,
-            }),
-            new TextRun({ break: 2 }),
-            new TextRun({ text: "xxx", bold: true }),
-        ],
-        spacing: {
-            before: 400,
-            after: 400,
-        },
-        alignment: AlignmentType.JUSTIFIED,
-    })
-    children.push(SummaryTitel);
 
 
     const TitleParagraph1 = new Paragraph({
@@ -871,9 +833,6 @@ Die Holsteinsicht ist auf den gewählten Arial bei einer Tiefe von `}),
                 children: [
                     ...geoHeader,
                     infoTable,
-                    SummaryTitel,
-                    Summary
-                    // ... add other paragraphs you want on the next page here
                 ],
             },
             {

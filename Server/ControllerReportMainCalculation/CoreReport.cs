@@ -16,7 +16,7 @@ public class CoreReport(ICreateReportAsync createReport, IRestrictionFromLandPar
         {
             return new[] { new Report
         {
-            Error = "Error 512: Bisher wird nur das Gebiet Berlin von GERMA unterstützt.\nFür Gebiete in Brandenburg kontaktieren sie die O-GT-T!"
+            Error = "Error 512: Bisher wird nur das Gebiet Berlin von GERMA unterstützt"
         }};
         }
 

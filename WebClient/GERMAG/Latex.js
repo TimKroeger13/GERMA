@@ -65,7 +65,7 @@ async function downloadLatexProject(ReportFlag = "Internal", ExportType = "LATEX
 
     // Fetch the logo file (with error handling)
     try {
-      const logoResponse = await fetch('pic/GasagLogoText.png');
+      const logoResponse = await fetch('pic/GERMALogoText.png');
       
       if (!logoResponse.ok) {
         throw new Error(`HTTP error! status: ${logoResponse.status}`);
@@ -73,7 +73,7 @@ async function downloadLatexProject(ReportFlag = "Internal", ExportType = "LATEX
 
       const logoArrayBuffer = await logoResponse.arrayBuffer();
 	  logoArrayBufferCopy = logoArrayBuffer;
-      picFolder.file("GasagLogoText.png", logoArrayBuffer);
+      picFolder.file("GERMALogoText.png", logoArrayBuffer);
     } catch (error) {
       console.error("Failed to fetch the logo:", error);
     }
@@ -130,10 +130,10 @@ async function generateAndOpenPdf(latexCode, mapImageBuffer, logoImageBuffer,fil
   const formData = new FormData();
   formData.append("latex", latexCode);
   formData.append("MapCapture.png", new Blob([mapImageBuffer]), "MapCapture.png");
-  formData.append("GasagLogoText.png", new Blob([logoImageBuffer]), "GasagLogoText.png");
+  formData.append("GERMALogoText.png", new Blob([logoImageBuffer]), "GERMALogoText.png");
 
   try {
-    const response = await fetch("https://germa-tool.gs-local.gasag.de/latexcompiler/compile", {
+    const response = await fetch("https://tkroeger.com/latexCompiler/compile", {
       method: "POST",
       body: formData
     });
@@ -510,7 +510,7 @@ function GenerateLatexCode(collectetData,ReportFlag) {
 	}
 	if(ReportFlag == 'Internal'){
 		UsableAreaString = "Für EWS nutzbare Fläche";
-		HadderString = "Geothermie Potentialanalyse - Interner Bericht";
+		HadderString = "Geothermie Potentialanalyse - GERMA Bericht";
 		ThermalTextString = "Wärmeleitfähigkeit ($W/mK$)";
 		geologicalCondition = collectetData["100regFull"].probePoint[0].properties.thermalCon;
 		AdressName = "Adresse/name";
@@ -574,16 +574,15 @@ function GenerateLatexCode(collectetData,ReportFlag) {
 }
 \\fancyhead[R]{%
 	\\parbox[b]{0.3\\textwidth}{\\raggedleft\\footnotesize%
-		\\raisebox{0mm}{\\includegraphics[height=3.5mm]{GasagLogoText.png}}%
+		\\raisebox{0mm}{\\includegraphics[height=3.5mm]{GERMALogoText.png}}%
 	}%
 }
-\\fancyfoot[L]{\\scriptsize\\makecell[l]{GASAG Solution Plus GmbH \\\\EUREF-Campus 23–24 10829 Berlin }}     % left footer
+\\fancyfoot[L]{\\scriptsize\\makecell[l]{GERMA Report}}     % left footer
 \\fancyfoot[C]{%
 	\\hspace{0cm}
 	\\scriptsize
 	\\begin{tabular}{l}
-		service-solution@gasag.de \\\\
-		www.gasag-solution.de
+		https://tkroeger.com
 	\\end{tabular}%
 }
 

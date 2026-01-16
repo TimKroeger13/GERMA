@@ -497,12 +497,6 @@ async function CreateReportHTML(reportData, ReportIsDetailed, DisplayGrafics) {
     var html = `
     <div class="geothermal-report" style="${backgroundColor}">`
 
-    html = html + `
-    <p style="color:red; font-size:13px;"><b>Für den folgenden Grundlagenbericht zur Nutzung von Erdwärmesonden am ausgewählten Standort wird keine Gewähr auf Richtigkeit und/oder Vollständigkeit genommen.<br>
-Die Nutzung und/oder Weitergabe der Angaben und Daten erfolgt auf eigenes Risiko.<br>
-Grundsätzlich ist für geothermische Kundenanfragen stets die Fachplanung O-GT-T zuständig und durch den Vertrieb einzubeziehen.</b></p><br>
-`
-
     if (ReportIsDetailed) {
 
         if (reportData.totalMaxDepth > 100) {

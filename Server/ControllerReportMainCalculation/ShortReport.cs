@@ -20,7 +20,7 @@ public class ShortReport(ICreateReportAsync createReport, IReceiveLandParcel rec
 
         LandParcel landParcelElement = await receiveLandParcel.GetLandParcel(Xcor, Ycor, Srid);
 
-        if (landParcelElement.Error == true) { return new[] { new Report { Error = "Error 512: Bisher wird nur das Gebiet Berlin von GERMA unterstützt.\nFür Gebiete in Brandenburg kontaktieren sie die O-GT-T!" } }; }
+        if (landParcelElement.Error == true) { return new[] { new Report { Error = "Error 512: Bisher wird nur das Gebiet Berlin von GERMA unterstützt" } }; }
         //if (landParcelElement.Geometry is MultiPolygon) { return new[] { new Report { Error = "Error 514: Die gewählten Flurstücke müssen zusammenhängen!" } }; }
 
         Restricion RestrictionFile = await restrictionFromLandParcel.CalculateRestrictions(landParcelElement, request_context);
