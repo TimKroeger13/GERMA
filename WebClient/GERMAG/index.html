@@ -67,18 +67,19 @@
   </div>
 
   <div class="inputFormula" id="excelCodeOverlay">
-  <form onsubmit="return false;">
-    <h2>Excel Code</h2>
-    <div style="margin-bottom: 1.5rem;">
-      <pre id="excelCodeText" title="Klicken zum Kopieren" style="background:#f6f6f6; border-radius:4px; padding:1rem; cursor:pointer; white-space:pre-wrap; user-select:all; font-family:monospace; font-size:16px; min-height:40px; text-align:left; margin:0;"
-        onclick="copyExcelCodeToClipboard()"></pre>
-      <div id="copiedMsg" style="color: #007bff; text-align:right; font-size:0.95rem; display: none;">Kopiert!</div>
-    </div>
-    <div style="width:100%; text-align:center;">
-      <button type="button" class="CancelButton" onclick="disableExcelCodeOverlay()">Schließen</button>
-    </div>
-  </form>
-</div>
+    <form onsubmit="return false;">
+      <h2>Excel Code</h2>
+      <div style="margin-bottom: 1.5rem;">
+        <pre id="excelCodeText" title="Klicken zum Kopieren"
+          style="background:#f6f6f6; border-radius:4px; padding:1rem; cursor:pointer; white-space:pre-wrap; user-select:all; font-family:monospace; font-size:16px; min-height:40px; text-align:left; margin:0;"
+          onclick="copyExcelCodeToClipboard()"></pre>
+        <div id="copiedMsg" style="color: #007bff; text-align:right; font-size:0.95rem; display: none;">Kopiert!</div>
+      </div>
+      <div style="width:100%; text-align:center;">
+        <button type="button" class="CancelButton" onclick="disableExcelCodeOverlay()">Schließen</button>
+      </div>
+    </form>
+  </div>
 
 
   <div id="inputFormulaBIM" class="inputFormula">
@@ -226,7 +227,8 @@
           <button id="btnMinusArea" class="Iconbutton" onclick="modeMinusArea()" title="Create negative area" disabled>
             <img src="pic/minusArea.svg" alt="Icon">
           </button>
-          <button id="btnAddSuperiorArea" class="Iconbutton" onclick="modeSuperiorArea()" title="Add superior Area" disabled>
+          <button id="btnAddSuperiorArea" class="Iconbutton" onclick="modeSuperiorArea()" title="Add superior Area"
+            disabled>
             <img src="pic/plusArea.svg" alt="Icon">
           </button>
           <button id="btnDissolveArea" class="Iconbutton" onclick="dissolveArea()" title="Dissiovle Area">
@@ -455,7 +457,7 @@
       keepBuffer: 2       // Keep tiles in memory for smoother experience
     }).addTo(map);
 
-  var wmsALKIS = L.tileLayer.wms('https://gdi.berlin.de/services/wms/alkis?', {
+    var wmsALKIS = L.tileLayer.wms('https://gdi.berlin.de/services/wms/alkis?', {
       layers: 'a_alkis_raster',
       format: 'image/png',
       transparent: true,
@@ -714,6 +716,88 @@
       map.on('zoomend', updateMarkerScale);
     }
 
+    async function CreateAllPointsWithTimer(T_ProbePointsGeometry, stepDelay = 50) {
+      const baseSize = 10;      // px, default marker size at base zoom
+      const minSize = 5;        // px, minimum marker size
+      const baseZoom = 18;      // reference zoom level
+
+      const markers = [];       // So we can update later
+
+      // Helper function: size based on zoom
+      function getSizeForZoom(zoom) {
+        let scale;
+        if (zoom <= baseZoom) {
+          scale = 1 - (baseZoom - zoom) * 0.2; // shrink for zooms < baseZoom
+        } else {
+          scale = 1 + (zoom - baseZoom) * 0.2; // grow for zooms > baseZoom
+        }
+        let size = Math.round(baseSize * scale);
+        if (size < minSize) size = minSize;
+        return size;
+      }
+
+      // Function to update marker sizes on zoom
+      function updateMarkerScale() {
+        const zoom = map.getZoom();
+        const size = getSizeForZoom(zoom);
+        const anchor = size / 2;
+
+        markers.forEach(marker => {
+          const svg = `
+        <svg width="${size}" height="${size}" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="8" cy="8" r="6" stroke="#262626" stroke-width="3" fill="#E7732D" />
+        </svg>
+      `;
+
+          const newIcon = L.divIcon({
+            className: 'svg-marker',
+            html: svg,
+            iconSize: [size, size],
+            iconAnchor: [anchor, anchor]
+          });
+
+          marker.setIcon(newIcon);
+        });
+      }
+
+      // Zoom-Event nur einmal registrieren
+      map.on('zoomend', updateMarkerScale);
+
+      // Marker nacheinander mit Delay hinzufügen
+      for (const feature of T_ProbePointsGeometry.features) {
+        const coords = feature.geometry.coordinates;
+        const zoom = map.getZoom();
+        const size = getSizeForZoom(zoom);
+        const anchor = size / 2;
+
+        const svg = `
+      <svg width="${size}" height="${size}" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="8" cy="8" r="6" stroke="#262626" stroke-width="3" fill="#E7732D" />
+      </svg>
+    `;
+
+        const marker = L.marker([coords[1], coords[0]], {
+          icon: L.divIcon({
+            className: 'svg-marker',
+            html: svg,
+            iconSize: [size, size],
+            iconAnchor: [anchor, anchor]
+          })
+        }).addTo(dynamicLayerGroup);
+
+        markers.push(marker);
+
+        // Warten, bevor der nächste Punkt hinzugefügt wird
+        await new Promise(resolve => setTimeout(resolve, stepDelay));
+      }
+
+      // Am Ende einmal skalieren (falls nötig)
+      updateMarkerScale();
+
+      return markers;
+    }
+
+
     async function AddGeoJson(geoJsonFeature, color) {
       let layer = L.geoJSON(geoJsonFeature, {
         style: feature => {
@@ -935,14 +1019,14 @@
 
       var AdressInput = document.getElementById("address-input");
 
-      if(AdressInput != null && AdressInput != ""){
+      if (AdressInput != null && AdressInput != "") {
         document.getElementById("Form_Internal_wirtschaftseinheit").value = AdressInput.value;
       }
 
-      
 
-      
-      
+
+
+
     }
 
     function hideInputFormulaInternal() {

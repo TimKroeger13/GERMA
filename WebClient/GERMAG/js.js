@@ -214,6 +214,7 @@ async function ShowDetailedReport(reportType, InputGeometry) {
 
     T_ProbePointsGeometry = turf.featureCollection(turfPoints);
 
+    //await CreateAllPointsWithTimer(T_ProbePointsGeometry, 2);
     await CreateAllPoints(T_ProbePointsGeometry);
 
     //Saving Last Report Geometry
