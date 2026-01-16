@@ -74,7 +74,7 @@ The usable drilling depth was determined based on the "[3D Geological Model of B
 
 To compare the heat demand of buildings on the considered property with the geothermal heat that can be provided by the probe field, the individual coverage of heat demand is calculated for each modeled probe field.
 
-For determining the expected annual heating work, data from "[Energymap](https://energymap-berlin.de/)" [[14](#references)] was used, which enables building-specific, AI-based estimation of annual heat demand. The Energymap data is integrated into GERMA via an API. By specifying a seasonal performance factor (SPF) of the heat pump, the proportion of heat demand that can be covered by the BHE field can then be calculated.
+For determining the expected annual heating work, data from "[Energymap](https://energymap-berlin.de/)" [[9](#references)] was used, which enables building-specific, AI-based estimation of annual heat demand. The Energymap data is integrated into GERMA via an API. By specifying a seasonal performance factor (SPF) of the heat pump, the proportion of heat demand that can be covered by the BHE field can then be calculated.
 
 ## Codebase
 
@@ -101,9 +101,9 @@ The complete source code of GERMA is publicly available on GitHub at "[TimKroege
 
 7. Frick M, Bott [Sippel] J, Scheck-Wenderoth M, Cacace M, Haacke N, Schneider M. 3D geological model of Berlin – Germany [dataset]. 2020. Available from: https://doi.org/10.5880/GFZ.4.5.2020.005
 
-8. Senatsverwaltung für Stadtentwicklung, Bauen und Wohnen. Geoportal Berlin [Internet]. Available from: https://gdi.berlin.de/viewer/main/. Accessed: 2025-11-20.
+8. Segbers S, Küster-Inderfurth A, Nytsch-Geusen C. Revolutionizing Heating Planning: A Data-Driven Approach for Accurate and Scalable Energy Consumption Predictions. In: BauSim Conference 2024; IBPSA-Germany and Austria; 2024; Vol. 10. Verfügbar unter: https://energymap-berlin.de/en/.  Zugriff am: 2025-10-22. 
 
-9. Verein Deutscher Ingenieure. Thermische Nutzung des Untergrunds – Grundlagen, Genehmigungen, Umweltaspekte (VDI 4640). Berlin: Beuth Verlag; 2010.
+9. 
 
 ## License
 
