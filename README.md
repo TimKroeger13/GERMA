@@ -103,7 +103,7 @@ The complete source code of GERMA is publicly available on GitHub at "[TimKroege
 
 8. Segbers S, Küster-Inderfurth A, Nytsch-Geusen C. Revolutionizing Heating Planning: A Data-Driven Approach for Accurate and Scalable Energy Consumption Predictions. In: BauSim Conference 2024; IBPSA-Germany and Austria; 2024; Vol. 10. Verfügbar unter: https://energymap-berlin.de/en/.  Zugriff am: 2025-10-22. 
 
-9. 
+9. Segbers S, Küster-Inderfurth A, Nytsch-Geusen C. Revolutionizing Heating Planning: A Data-Driven Approach for Accurate and Scalable Energy Consumption Predictions. In: BauSim Conference 2024; IBPSA-Germany and Austria; 2024; Vol. 10. Verfügbar unter: https://energymap-berlin.de/en/.  Zugriff am: 2025-10-22.
 
 ## License
 
