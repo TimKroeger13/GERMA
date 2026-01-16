@@ -336,7 +336,8 @@
 
     map = L.map('map', {
       zoomSnap: 0,
-      zoomDelta: 0.1,
+      zoomDelta: 1,
+      wheelPxPerZoomLevel: 30,
       keyboard: false
     }).setView([52.52, 13.40], 12);
     window.myMap = map;
