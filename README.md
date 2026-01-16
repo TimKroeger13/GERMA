@@ -1,6 +1,6 @@
 # GERMA - Geothermal Energy Resource Mapping and Analysis
 
-GERMA is a software tool developed as part of a master's thesis at the Technical University of Berlin under the supervision of GASAG Solution Plus within the Urban [Ground Heat project](https://www.ieg.fraunhofer.de/de/projekte/urbangroundheat.html) [[1](#ref1)] (FKZ: 03EN3066).
+GERMA is a software tool developed as part of a master's thesis at the Technical University of Berlin under the supervision of GASAG Solution Plus within the Urban [Ground Heat project](https://www.ieg.fraunhofer.de/de/projekte/urbangroundheat.html) [[1](#references)]* (FKZ: 03EN3066).
 
 <img width="600" alt="image" src="https://github.com/user-attachments/assets/d0323588-8cfc-452a-9582-eceee14d1aac" />
 <br>
@@ -87,7 +87,7 @@ The complete source code of GERMA is publicly available on GitHub at "[TimKroege
 
 ## References
 
-<a id="ref1"></a>1. Fraunhofer IEG. UrbanGroundHeat – Wärmewende in urbanen Bestandsquartieren [Internet]. Available from: https://www.ieg.fraunhofer.de/de/projekte/urbangroundheat.html. Accessed: 2024-06-20.
+1. Fraunhofer IEG. UrbanGroundHeat – Wärmewende in urbanen Bestandsquartieren [Internet]. Available from: https://www.ieg.fraunhofer.de/de/projekte/urbangroundheat.html. Accessed: 2024-06-20.
 
 2. Senatsverwaltung für Stadtentwicklung, Bauen und Wohnen. Geoportal Berlin [Internet]. Available from: https://gdi.berlin.de/viewer/main/. Accessed: 2025-11-20.
 
