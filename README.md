@@ -15,3 +15,5 @@ dotnet ef dbcontext scaffold "Host=localhost:5433;Database=germa;Username=germa;
 | 516 | To much requests for the short-report. Rate is limited |
 | 517 | To much requests for the full-report. Rate is limited |
 | 518 | To much requests for the User assignment. Rate is limited |
+
+![gif1](https://github.com/user-attachments/assets/f946886a-6d98-4817-aa0b-a5dde60ad579)
