@@ -109,9 +109,12 @@ The complete source code of GERMA is publicly available on GitHub at "[TimKroege
 
 MIT License
 
+<br>
+<br>
+
 ---
 
-# Notes for the Setup
+# Notes for Creation
 
 ### Scaffolding Request
 <h2>Database scaffolding:</h2>
