@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "Bitte zitieren Sie dieses Projekt wie unten angegeben."
+title: "GERMA"
+version: "1.0.0"
+date-released: 2026-02-12
+authors:
+  - family-names: "Kröger"
+    given-names: "Tim"
+    affiliation: "Gasag Solution Plus"
+  - name: "Urban Ground Heat project (FKZ: 03EN3066)."
