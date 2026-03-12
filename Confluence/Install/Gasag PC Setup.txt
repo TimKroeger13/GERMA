@@ -1,0 +1,25 @@
+sudo mkdir -p /home/srv/postgres-germa
+
+docker run -d \
+--name germa_local \
+ -p 5433:5432 \
+ --shm-size=16g \
+ -e POSTGRES_PASSWORD=germa \
+ -e POSTGRES_DB=germa \
+ -e PGDATA=/var/lib/postgresql/data/pgdata \
+ -v /home/srv/postgres-germa:/var/lib/postgresql/data \
+ --restart unless-stopped \
+ postgis/postgis
+
+
+docker run -d \
+--name gsp \
+ -p 6543:5432 \
+ --shm-size=16g \
+ -e POSTGRES_PASSWORD=gsp \
+ -e POSTGRES_DB=gsp \
+ -e PGDATA=/var/lib/postgresql/data/pgdata \
+ -v /home/srv/postgres:/var/lib/postgresql/data \
+ --restart unless-stopped \
+ postgis/postgis
+
